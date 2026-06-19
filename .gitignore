@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets
+.env
+
+# Generated at runtime
+*.db
+*.sqlite
+*.sqlite3
+test_results.csv
+
+# IDE
+.vscode/
+.idea/

@@ -72,6 +72,8 @@ Agents need context to operate. The Orchestrator manages shared state and passes
 
 Coordination rules that protect system state: only the **Ordering Agent** writes transactions; only the **Request Parser / Item Mapper** maps colloquial names to exact catalog `item_name` values.
 
+Orchestration mechanics and smolagents coding patterns are in [IMPLEMENTATION.md](./IMPLEMENTATION.md).
+
 See the [state layers diagram](./WORKFLOW.md#state-layers) in WORKFLOW.md.
 
 ## Failure Handling and Recovery
@@ -88,6 +90,8 @@ See the [state layers diagram](./WORKFLOW.md#state-layers) in WORKFLOW.md.
 
 When multiple agents operate on shared data, they need a consistent view of world state and rules for resolving contradictions.
 
+Agents access shared state only through `@tool` functions (Lesson 6 pattern), with SQLite as the store rather than an in-memory singleton.
+
 | Mechanism | Application in Munder Difflin |
 |-----------|-------------------------------|
 | **Database as source of truth (primary sync)** | All agents read inventory, cash, and quotes via starter DB functions scoped to `request_date`. Only the Ordering Agent writes, which avoids write conflicts |
@@ -103,7 +107,7 @@ Avoiding the Peer-to-Peer pattern (see above) keeps a single control flow and on
 
 | Agent | Role | Key tools (wrapping starter DB functions) |
 |-------|------|-------------------------------------------|
-| **Orchestrator Agent** | Single entry point; routes text between agents; composes final customer reply | Delegates via `smolagents` managed agents; no direct DB writes |
+| **Orchestrator Agent** | Single entry point; routes text between agents; composes final customer reply | Delegates via `smolagents` (wrapper tools or `managed_agents`); no direct DB writes |
 | **Request Parser / Item Mapper** | Extract quantities, delivery deadline, job/event context; map fuzzy names to exact `item_name` from `paper_supplies` | Read-only catalog lookup; outputs structured text for other agents |
 | **Inventory Agent** | Check stock as-of request date; flag shortfalls vs `min_stock_level` | `get_all_inventory()`, `get_stock_level()` |
 | **Quoting Agent** | Price line items; apply bulk discounts; reference past quotes | `search_quote_history()`, unit prices from `inventory` / `paper_supplies` |
@@ -234,4 +238,4 @@ Diagrams in [WORKFLOW.md](./WORKFLOW.md): [sequence](./WORKFLOW.md#per-request-s
 | Orchestrator Agent | Generate end-of-run report | `generate_financial_report(as_of_date)` |
 | All | DB initialization at startup | `init_database(db_engine)` |
 
-**Framework:** `smolagents`: specialists as `CodeAgent` or `ToolCallingAgent`; Orchestrator as manager with `managed_agents`. LLM via Vocareum OpenAI (see [`.env.example`](./.env.example) / [VOCAREUM_SETUP.md](./VOCAREUM_SETUP.md)).
+**Framework:** `smolagents`: specialists as `CodeAgent` or `ToolCallingAgent`; Orchestrator delegates via `managed_agents` or wrapper `@tool` functions that call `self.<specialist>.run(text)`—both satisfy orchestrator-only delegation. [IMPLEMENTATION.md](./IMPLEMENTATION.md) documents this wrapper-tool pattern (course Lessons 3 and 5; Lesson 6 reinforces the same orchestration with in-memory `factory_state`, which this project replaces with SQLite). LLM via Vocareum OpenAI (see [`.env.example`](./.env.example) / [VOCAREUM_SETUP.md](./VOCAREUM_SETUP.md)).

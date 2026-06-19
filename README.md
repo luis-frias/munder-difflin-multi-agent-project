@@ -1,6 +1,6 @@
 # Munder Difflin Multi-Agent System Project
 
-Welcome to the starter code repository for the **Munder Difflin Paper Company Multi-Agent System Project**! This repository contains the starter code and tools you will need to design, build, and test a multi-agent system that supports core business operations at a fictional paper manufacturing company.
+Welcome to the starter code repository for the **Munder Difflin Paper Company Multi-Agent System Project**. This repository contains the starter code and tools you will need to design, build, and test a multi-agent system that supports core business operations at a fictional paper manufacturing company.
 
 ## Project Context
 
@@ -12,7 +12,7 @@ You've been hired as an AI consultant by Munder Difflin Paper Company, a fiction
 
 Your solution must use a maximum of **5 agents** and process inputs and outputs entirely via **text-based communication**.
 
-This project uses **`smolagents`** (the same framework as lessons 1–7), combined with SQLite, `pandas`, and LLM prompt engineering.
+This project uses **`smolagents`** (same framework as lessons 1-7), combined with SQLite, `pandas`, and LLM prompt engineering.
 
 ---
 
@@ -41,7 +41,7 @@ Files not committed (created locally): `.env`, `.venv/`, `munder_difflin.db`, `t
 
 ## Submission Checklist
 
-Grading index — maps each deliverable to its location in this repository:
+Grading index: maps each deliverable to its location in this repository:
 
 | # | Deliverable | Location |
 |---|-------------|----------|
@@ -105,18 +105,19 @@ Output will include:
 
 | Document | Contents |
 |----------|----------|
-| [DESIGN.md](./DESIGN.md) | Architecture, agent roles, data flow, tool mapping, design decisions |
-| [WORKFLOW.md](./WORKFLOW.md) | Mermaid diagrams — [architecture](./WORKFLOW.md#high-level-architecture), [sequence](./WORKFLOW.md#per-request-sequence), [test loop](./WORKFLOW.md#test-run-loop) |
+| [DESIGN.md](./DESIGN.md) | Architecture, agent roles, [routing strategy](./DESIGN.md#routing-strategy), [state management](./DESIGN.md#state-management), [failure handling](./DESIGN.md#failure-handling-and-recovery), [multi-agent coordination](./DESIGN.md#multi-agent-state-coordination), data flow, tool mapping |
+| [WORKFLOW.md](./WORKFLOW.md) | Mermaid diagrams: [architecture](./WORKFLOW.md#high-level-architecture), [sequence](./WORKFLOW.md#per-request-sequence), [routing decisions](./WORKFLOW.md#routing-decisions), [state layers](./WORKFLOW.md#state-layers), [test loop](./WORKFLOW.md#test-run-loop) |
 
 ---
 
 ### Tips for Success
 
-Implementation reminders (expanded rationale in [DESIGN.md](./DESIGN.md)):
+Implementation notes (see [DESIGN.md](./DESIGN.md)):
 
 - Include **dates** in all inter-agent handoffs
 - Use **exact item names** from the catalog to avoid transaction failures
 - Apply **bulk discounts** and reference quote history when pricing
 - Test individual agent tools before full orchestration
+- Pass only the data each specialist needs at each handoff; see [DESIGN.md](./DESIGN.md#routing-strategy) and [WORKFLOW.md](./WORKFLOW.md#routing-decisions)
 
 ---

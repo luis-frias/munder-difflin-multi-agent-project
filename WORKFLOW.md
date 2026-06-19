@@ -1,6 +1,6 @@
 # Workflow
 
-Workflow diagrams for the Munder Difflin multi-agent system — satisfies submission checklist item 2 (see [Submission Checklist](./README.md#submission-checklist) in README).
+Workflow diagrams for the Munder Difflin multi-agent system (submission checklist item 2; see [Submission Checklist](./README.md#submission-checklist)).
 
 Design narrative and agent roles are in [DESIGN.md](./DESIGN.md).
 
@@ -8,7 +8,7 @@ Design narrative and agent roles are in [DESIGN.md](./DESIGN.md).
 
 ## High-Level Architecture
 
-Shows the Orchestrator Pattern: all specialist communication routes through the Orchestrator Agent.
+All specialist communication routes through the Orchestrator Agent.
 
 ```mermaid
 flowchart TB
@@ -39,7 +39,7 @@ flowchart TB
 
 ## Per-Request Sequence
 
-Shows the step-by-step message flow for a single customer request, including parallel inventory/quoting checks and the restock branch.
+Message flow for one customer request: parallel inventory and quoting, parser clarification, specialist retry, restock branches, and failure paths.
 
 ```mermaid
 sequenceDiagram
@@ -53,32 +53,103 @@ sequenceDiagram
 
     Cust->>Orch: request + request_date
     Orch->>Parse: parse and map items
-    Parse-->>Orch: item list, quantities, deadline
-    par Parallel checks
-        Orch->>Inv: check stock as of date
-        Inv->>DB: get_stock_level
-        Inv-->>Orch: availability report
-    and
-        Orch->>Quote: build quote
-        Quote->>DB: search_quote_history
-        Quote-->>Orch: priced quote with bulk discount
+    alt Parser returns unresolved items
+        Parse-->>Orch: unresolved item names
+        Orch-->>Cust: clarification request
+    else Parsed items valid
+        Parse-->>Orch: item list, quantities, deadline
+        par Parallel checks
+            Orch->>Inv: check stock as of date
+            Inv->>DB: get_stock_level
+            Inv-->>Orch: availability report
+        and
+            Orch->>Quote: build quote
+            Quote->>DB: search_quote_history
+            Quote-->>Orch: priced quote with bulk discount
+        end
+        alt Specialist transient error
+            Orch->>Inv: retry specialist once
+            Inv-->>Orch: availability report or error
+        end
+        alt Insufficient stock and cash OK
+            Orch->>Ord: place stock_orders
+            Ord->>DB: create_transaction stock_orders
+            Ord-->>Orch: delivery ETA
+            Orch->>Ord: record sales
+            Ord->>DB: create_transaction sales
+            Ord-->>Orch: confirmation
+            Orch-->>Cust: quote + delivery + order summary
+        else Insufficient stock and cash insufficient
+            Orch-->>Cust: failure report
+        else Sufficient stock
+            Orch->>Ord: record sales
+            Ord->>DB: create_transaction sales
+            Ord-->>Orch: confirmation
+            Orch-->>Cust: quote + delivery + order summary
+        end
     end
-    alt Insufficient stock
-        Orch->>Ord: place stock_orders
-        Ord->>DB: create_transaction stock_orders
-        Ord-->>Orch: delivery ETA
+```
+
+<a id="routing-decisions"></a>
+
+## Routing Decisions
+
+The Orchestrator inspects Parser output and specialist reports to decide the next step. Details in [DESIGN.md routing strategy](./DESIGN.md#routing-strategy).
+
+```mermaid
+flowchart TD
+    Start[CustomerRequest] --> Orch[OrchestratorAgent]
+    Orch --> Parser[RequestParserAgent]
+    Parser --> Decision{ParsedItemsValid}
+    Decision -->|No| Clarify[ReturnClarificationToCustomer]
+    Decision -->|Yes| Parallel[InventoryAndQuotingParallel]
+    Parallel --> StockCheck{SufficientStock}
+    StockCheck -->|No| CashCheck{SufficientCashForRestock}
+    CashCheck -->|Yes| Restock[OrderingAgentStockOrders]
+    CashCheck -->|No| FailReport[FailureReport]
+    Restock --> Sales[OrderingAgentSales]
+    StockCheck -->|Yes| Sales
+    Sales --> Reply[UnifiedCustomerReply]
+    FailReport --> Reply
+    Clarify --> Reply
+```
+
+<a id="state-layers"></a>
+
+## State Layers
+
+Conversation-level state lives in the Orchestrator during a request; system-level state persists in SQLite across requests. Details in [DESIGN.md state management](./DESIGN.md#state-management).
+
+```mermaid
+flowchart TB
+    subgraph conversation [ConversationStatePerRequest]
+        OrchCtx["Orchestrator request context"]
+        OrchCtx --- RawReq[Raw request]
+        OrchCtx --- Parsed[Parsed items]
+        OrchCtx --- InvReport[Inventory report]
+        OrchCtx --- QuoteDraft[Quote draft]
+        OrchCtx --- OrderResult[Ordering result]
     end
-    Orch->>Ord: record sales
-    Ord->>DB: create_transaction sales
-    Ord-->>Orch: confirmation
-    Orch-->>Cust: quote + delivery + order summary
+    subgraph system [SystemStateAcrossRequests]
+        DB[(SQLite munder_difflin.db)]
+        DB --- InventoryTbl[inventory]
+        DB --- TransactionsTbl[transactions]
+        DB --- QuotesTbl[quotes]
+    end
+    Orch[OrchestratorAgent] --> OrchCtx
+    Inv[InventoryAgent] -->|"read"| DB
+    Quote[QuotingAgent] -->|"read"| DB
+    Order[OrderingAgent] -->|"sole writer"| DB
+    Orch -->|"text handoffs"| Inv
+    Orch -->|"text handoffs"| Quote
+    Orch -->|"text handoffs"| Order
 ```
 
 <a id="test-run-loop"></a>
 
 ## Test Run Loop
 
-Shows how `run_test_scenarios()` in `project_starter.py` drives the multi-agent system across all sample requests.
+How `run_test_scenarios()` in `project_starter.py` drives the system across sample requests.
 
 ```mermaid
 flowchart TD

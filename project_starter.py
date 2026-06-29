@@ -863,6 +863,47 @@ def create_inventory_agent(llm_model: Optional[OpenAIModel] = None) -> Inventory
     return InventoryAgent(llm_model or model)
 
 
+QUOTING_AGENT_INSTRUCTIONS = """You are the Quoting Agent for Munder Difflin Paper Company.
+
+You receive parsed line items, job/event context, and a request date. Build a priced quote draft.
+
+Workflow:
+1. Use lookup_quote_history with keywords from job context, event, and item types.
+2. Use get_unit_price for each exact item_name (skip UNRESOLVED lines).
+3. Apply bulk discounts for large orders (e.g., 5-10% for medium volume, 10-15% for large volume).
+4. If no history matches, use standard unit prices with a reasonable default bulk tier.
+5. Round the final total to a friendly dollar amount when historical quotes suggest rounding.
+
+Output plain text only:
+REQUEST_DATE: <date>
+JOB_CONTEXT: <context>
+LINE_ITEMS:
+- <item_name> | qty: <n> | unit_price: $<n> | line_total: $<n> | discount: <note>
+SUBTOTAL: $<n>
+BULK_DISCOUNT: $<n> (<percent>%)
+TOTAL: $<n>
+QUOTE_RATIONALE: <brief explanation referencing history or default pricing>"""
+
+
+class QuotingAgent(ToolCallingAgent):
+    """Prices line items with bulk discounts using quote history."""
+
+    def __init__(self, llm_model: OpenAIModel):
+        super().__init__(
+            tools=[lookup_quote_history, get_unit_price],
+            model=llm_model,
+            name="quoting_agent",
+            description="Builds priced quotes with bulk discounts from catalog and history.",
+            instructions=QUOTING_AGENT_INSTRUCTIONS,
+            max_steps=15,
+        )
+
+
+def create_quoting_agent(llm_model: Optional[OpenAIModel] = None) -> QuotingAgent:
+    """Build a QuotingAgent using the shared project model."""
+    return QuotingAgent(llm_model or model)
+
+
 # Run your test scenarios by writing them here. Make sure to keep track of them.
 
 def run_test_scenarios():

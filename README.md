@@ -24,7 +24,6 @@ munder-difflin-multi-agent-project/
 ├── DESIGN.md
 ├── WORKFLOW.md
 ├── REFLECTION.md
-├── IMPLEMENTATION.md
 ├── VOCAREUM_SETUP.md
 ├── requirements.txt
 ├── .env.example

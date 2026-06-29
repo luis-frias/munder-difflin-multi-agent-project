@@ -72,7 +72,7 @@ Agents need context to operate. The Orchestrator manages shared state and passes
 
 Coordination rules that protect system state: only the **Ordering Agent** writes transactions; only the **Request Parser / Item Mapper** maps colloquial names to exact catalog `item_name` values.
 
-Orchestration mechanics and smolagents coding patterns are in [IMPLEMENTATION.md](./IMPLEMENTATION.md).
+Orchestration mechanics and smolagents wiring are implemented in [project_starter.py](./project_starter.py).
 
 See the [state layers diagram](./WORKFLOW.md#state-layers) in WORKFLOW.md.
 
@@ -238,4 +238,4 @@ Diagrams in [WORKFLOW.md](./WORKFLOW.md): [sequence](./WORKFLOW.md#per-request-s
 | Ordering Agent | Post-order financial summary | `generate_financial_report(as_of_date)` |
 | All | DB initialization at startup | `init_database(db_engine)` |
 
-**Framework:** `smolagents`: specialists as `CodeAgent` or `ToolCallingAgent`; Orchestrator delegates via `managed_agents` or wrapper `@tool` functions that call `self.<specialist>.run(text)`—both satisfy orchestrator-only delegation. [IMPLEMENTATION.md](./IMPLEMENTATION.md) documents this wrapper-tool pattern (course Lessons 3 and 5; Lesson 6 reinforces the same orchestration with in-memory `factory_state`, which this project replaces with SQLite). LLM via Vocareum OpenAI (see [`.env.example`](./.env.example) / [VOCAREUM_SETUP.md](./VOCAREUM_SETUP.md)).
+**Framework:** `smolagents`: specialists as `CodeAgent` or `ToolCallingAgent`; Orchestrator delegates via `managed_agents` or wrapper `@tool` functions that call `self.<specialist>.run(text)`—both satisfy orchestrator-only delegation (course Lessons 3 and 5; Lesson 6 reinforces the same orchestration with in-memory `factory_state`, which this project replaces with SQLite). LLM via Vocareum OpenAI (see [`.env.example`](./.env.example) / [VOCAREUM_SETUP.md](./VOCAREUM_SETUP.md)).

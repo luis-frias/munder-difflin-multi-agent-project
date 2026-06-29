@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import time
+import json
 import dotenv
 import ast
 from sqlalchemy.sql import text
@@ -606,17 +607,167 @@ def create_llm_model() -> OpenAIModel:
 
 
 model = create_llm_model()
-"""Set up tools for your agents to use, these should be methods that combine the database functions above
- and apply criteria to them to ensure that the flow of the system is correct."""
+
+# Set up tools for your agents to use. These wrap starter DB functions and return text.
+
+
+# Tools for request parser agent
+
+
+@tool
+def list_catalog_items() -> str:
+    """List all catalog item names, categories, and unit prices for request mapping."""
+    lines = [
+        f"- {item['item_name']} | category: {item['category']} | unit_price: ${item['unit_price']:.2f}"
+        for item in paper_supplies
+    ]
+    return "Catalog items:\n" + "\n".join(lines)
 
 
 # Tools for inventory agent
 
 
+@tool
+def check_all_stock(as_of_date: str) -> str:
+    """Return all items with positive stock as of the given date.
+
+    Args:
+        as_of_date: Inventory cutoff date in YYYY-MM-DD format.
+    """
+    inventory = get_all_inventory(as_of_date)
+    if not inventory:
+        return f"No inventory on record as of {as_of_date}."
+    lines = [f"- {name}: {qty} units" for name, qty in sorted(inventory.items())]
+    return f"Inventory as of {as_of_date}:\n" + "\n".join(lines)
+
+
+@tool
+def check_stock(item_name: str, as_of_date: str) -> str:
+    """Return stock level for one catalog item as of the given date.
+
+    Args:
+        item_name: Exact catalog item name.
+        as_of_date: Stock cutoff date in YYYY-MM-DD format.
+    """
+    df = get_stock_level(item_name, as_of_date)
+    stock = int(df["current_stock"].iloc[0])
+    return f"{item_name}: {stock} units in stock as of {as_of_date}."
+
+
+@tool
+def get_inventory_item_details(item_name: str) -> str:
+    """Return min_stock_level and unit_price for an item from the inventory reference table.
+
+    Args:
+        item_name: Exact catalog item name.
+    """
+    df = pd.read_sql(
+        "SELECT item_name, category, unit_price, min_stock_level FROM inventory WHERE item_name = :item_name",
+        db_engine,
+        params={"item_name": item_name},
+    )
+    if df.empty:
+        catalog_match = next((i for i in paper_supplies if i["item_name"] == item_name), None)
+        if catalog_match:
+            return (
+                f"{item_name} is in the catalog but not in seeded inventory. "
+                f"category: {catalog_match['category']}, unit_price: ${catalog_match['unit_price']:.2f}"
+            )
+        return f"{item_name} was not found in the catalog or inventory tables."
+    row = df.iloc[0]
+    return (
+        f"{row['item_name']} | category: {row['category']} | "
+        f"unit_price: ${row['unit_price']:.2f} | min_stock_level: {int(row['min_stock_level'])}"
+    )
+
+
 # Tools for quoting agent
 
 
+@tool
+def lookup_quote_history(search_terms: str, limit: int = 5) -> str:
+    """Search historical quotes by comma-separated keywords.
+
+    Args:
+        search_terms: Comma-separated keywords such as job type, event, or paper type.
+        limit: Maximum number of quote records to return.
+    """
+    terms = [t.strip() for t in search_terms.split(",") if t.strip()]
+    results = search_quote_history(terms, limit=limit)
+    if not results:
+        return f"No quote history found for terms: {search_terms}"
+    return json.dumps(results, indent=2, default=str)
+
+
+@tool
+def get_unit_price(item_name: str) -> str:
+    """Return the unit price for a catalog item by exact item_name.
+
+    Args:
+        item_name: Exact catalog item name.
+    """
+    for item in paper_supplies:
+        if item["item_name"] == item_name:
+            return f"{item_name}: ${item['unit_price']:.2f} per unit"
+    df = pd.read_sql(
+        "SELECT unit_price FROM inventory WHERE item_name = :item_name",
+        db_engine,
+        params={"item_name": item_name},
+    )
+    if not df.empty:
+        price = float(df.iloc[0]["unit_price"])
+        return f"{item_name}: ${price:.2f} per unit (from inventory)"
+    return f"No unit price found for item: {item_name}"
+
+
 # Tools for ordering agent
+
+
+@tool
+def record_transaction(
+    item_name: str,
+    transaction_type: str,
+    quantity: int,
+    price: float,
+    date: str,
+) -> str:
+    """Record a stock_orders or sales transaction.
+
+    Args:
+        item_name: Exact catalog item name.
+        transaction_type: Either stock_orders or sales.
+        quantity: Number of units in the transaction.
+        price: Total transaction price in dollars.
+        date: Transaction date in YYYY-MM-DD format.
+    """
+    txn_id = create_transaction(item_name, transaction_type, quantity, price, date)
+    return (
+        f"Transaction {txn_id} recorded: {transaction_type} | {item_name} | "
+        f"{quantity} units | ${price:.2f} on {date}"
+    )
+
+
+@tool
+def check_cash_balance(as_of_date: str) -> str:
+    """Return available cash balance as of the given date.
+
+    Args:
+        as_of_date: Cash balance cutoff date in YYYY-MM-DD format.
+    """
+    balance = get_cash_balance(as_of_date)
+    return f"Cash balance as of {as_of_date}: ${balance:,.2f}"
+
+
+@tool
+def estimate_delivery_date(input_date: str, quantity: int) -> str:
+    """Estimate supplier delivery date from order date and quantity.
+
+    Args:
+        input_date: Order date in YYYY-MM-DD format.
+        quantity: Number of units ordered.
+    """
+    delivery = get_supplier_delivery_date(input_date, quantity)
+    return f"Estimated delivery for {quantity} units ordered on {input_date}: {delivery}"
 
 
 # Set up your agents and create an orchestration agent that will manage them.

@@ -1,6 +1,6 @@
 # System Design
 
-Design notes for the Munder Difflin multi-agent system (submission checklist item 3; see [Submission Checklist](./README.md#submission-checklist)).
+Design notes for the Munder Difflin multi-agent system (submission checklist item 3; see [Submission Checklist](./README.md#submission-checklist)). Evaluation results and improvement suggestions: [REFLECTION.md](./REFLECTION.md).
 
 ## Architecture Overview
 
@@ -111,7 +111,7 @@ Avoiding the Peer-to-Peer pattern (see above) keeps a single control flow and on
 | **Request Parser / Item Mapper** | Extract quantities, delivery deadline, job/event context; map fuzzy names to exact `item_name` from `paper_supplies` | Read-only catalog lookup; outputs structured text for other agents |
 | **Inventory Agent** | Check stock as-of request date; flag shortfalls vs `min_stock_level` | `get_all_inventory()`, `get_stock_level()` |
 | **Quoting Agent** | Price line items; apply bulk discounts; reference past quotes | `search_quote_history()`, unit prices from `inventory` / `paper_supplies` |
-| **Ordering Agent** | Fulfill sales; place supplier restocks; validate cash | `create_transaction()`, `get_cash_balance()`, `get_supplier_delivery_date()` |
+| **Ordering Agent** | Fulfill sales; place supplier restocks; validate cash | `create_transaction()`, `get_cash_balance()`, `get_supplier_delivery_date()`, `get_financial_report()` |
 
 The Request Parser is titled by pipeline function (parse + map) rather than domain name. In code and diagrams it is `RequestParserAgent`.
 
@@ -223,7 +223,7 @@ The Orchestrator reshapes data at each handoff so specialists get only what they
 | Orchestrator to Ordering | Restock qty + sale prices from prior steps | Only actionable items | Combined fulfill instructions |
 | Orchestrator to Customer | Quote + delivery ETA + order summary | Internal agent errors (unless relevant) | Unified customer reply |
 
-Diagrams in [WORKFLOW.md](./WORKFLOW.md): [sequence](./WORKFLOW.md#per-request-sequence), [architecture](./WORKFLOW.md#high-level-architecture), [routing decisions](./WORKFLOW.md#routing-decisions), [state layers](./WORKFLOW.md#state-layers).
+Diagrams in [WORKFLOW.md](./WORKFLOW.md): [sequence](./WORKFLOW.md#per-request-sequence), [architecture](./WORKFLOW.md#high-level-architecture), [agent tools](./WORKFLOW.md#agent-tools), [routing decisions](./WORKFLOW.md#routing-decisions), [state layers](./WORKFLOW.md#state-layers).
 
 ## Tool-to-Function Mapping
 
@@ -235,7 +235,7 @@ Diagrams in [WORKFLOW.md](./WORKFLOW.md): [sequence](./WORKFLOW.md#per-request-s
 | Ordering Agent | Record sale or restock | `create_transaction(item_name, type, qty, price, date)` |
 | Ordering Agent | Validate available cash | `get_cash_balance(as_of_date)` |
 | Ordering Agent | Estimate supplier delivery | `get_supplier_delivery_date(input_date, quantity)` |
-| Orchestrator Agent | Generate end-of-run report | `generate_financial_report(as_of_date)` |
+| Ordering Agent | Post-order financial summary | `generate_financial_report(as_of_date)` |
 | All | DB initialization at startup | `init_database(db_engine)` |
 
 **Framework:** `smolagents`: specialists as `CodeAgent` or `ToolCallingAgent`; Orchestrator delegates via `managed_agents` or wrapper `@tool` functions that call `self.<specialist>.run(text)`—both satisfy orchestrator-only delegation. [IMPLEMENTATION.md](./IMPLEMENTATION.md) documents this wrapper-tool pattern (course Lessons 3 and 5; Lesson 6 reinforces the same orchestration with in-memory `factory_state`, which this project replaces with SQLite). LLM via Vocareum OpenAI (see [`.env.example`](./.env.example) / [VOCAREUM_SETUP.md](./VOCAREUM_SETUP.md)).

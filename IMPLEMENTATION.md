@@ -134,9 +134,9 @@ All SQLite access goes through agent-local `@tool` wrappers around starter funct
 |-------|------------------------------|--------|
 | Inventory | `get_all_inventory`, `get_stock_level` | Read only |
 | Quoting | `search_quote_history` | Read only |
-| Ordering | `create_transaction`, `get_cash_balance`, `get_supplier_delivery_date` | Write (transactions) + read |
+| Ordering | `create_transaction`, `get_cash_balance`, `get_supplier_delivery_date`, `generate_financial_report` | Write (transactions) + read |
 | Parser | Catalog lookup (read `paper_supplies` or equivalent) | Read only |
-| Orchestrator | None for DB; may call `generate_financial_report` for reporting | No transaction writes |
+| Orchestrator | None for DB; test harness calls `generate_financial_report` for logging | No transaction writes |
 
 Example wrapper:
 

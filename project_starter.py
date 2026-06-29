@@ -772,6 +772,17 @@ def estimate_delivery_date(input_date: str, quantity: int) -> str:
     return f"Estimated delivery for {quantity} units ordered on {input_date}: {delivery}"
 
 
+@tool
+def get_financial_report(as_of_date: str) -> str:
+    """Return cash balance and inventory value as of the given date.
+
+    Args:
+        as_of_date: Report cutoff date in YYYY-MM-DD format.
+    """
+    report = generate_financial_report(as_of_date)
+    return json.dumps(report, indent=2, default=str)
+
+
 # Set up your agents and create an orchestration agent that will manage them.
 
 REQUEST_PARSER_INSTRUCTIONS = """You are the Request Parser / Item Mapper for Munder Difflin Paper Company.
@@ -917,6 +928,7 @@ Workflow:
 4. Use estimate_delivery_date for restock quantities when applicable.
 5. If cash is insufficient for restock, skip stock_orders and report the shortfall.
 6. Use exact catalog item_name values only.
+7. Optionally use get_financial_report after transactions for a post-order cash and inventory summary.
 
 Transaction rules:
 - stock_orders price = restock_qty * unit_cost (supplier cost)
@@ -938,7 +950,12 @@ class OrderingAgent(ToolCallingAgent):
 
     def __init__(self, llm_model: OpenAIModel):
         super().__init__(
-            tools=[record_transaction, check_cash_balance, estimate_delivery_date],
+            tools=[
+                record_transaction,
+                check_cash_balance,
+                estimate_delivery_date,
+                get_financial_report,
+            ],
             model=llm_model,
             name="ordering_agent",
             description="Fulfills sales and supplier restocks with cash validation.",

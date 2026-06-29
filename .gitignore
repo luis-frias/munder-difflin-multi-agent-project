@@ -15,7 +15,6 @@ env/
 *.db
 *.sqlite
 *.sqlite3
-test_results.csv
 
 # IDE
 .vscode/

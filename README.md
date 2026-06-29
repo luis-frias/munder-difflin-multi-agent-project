@@ -34,7 +34,7 @@ munder-difflin-multi-agent-project/
 └── VOCAREUM_SETUP.md
 ```
 
-Files not committed (created locally): `.env`, `.venv/`, `munder_difflin.db`, `test_results.csv`
+Files not committed (created locally): `.env`, `.venv/`, `munder_difflin.db`
 
 ---
 

@@ -904,6 +904,52 @@ def create_quoting_agent(llm_model: Optional[OpenAIModel] = None) -> QuotingAgen
     return QuotingAgent(llm_model or model)
 
 
+ORDERING_AGENT_INSTRUCTIONS = """You are the Ordering Agent for Munder Difflin Paper Company.
+
+You fulfill orders and place supplier restocks. You are the only agent that writes transactions.
+
+Workflow:
+1. Use check_cash_balance as of REQUEST_DATE before any stock_orders.
+2. If restock is needed and cash is sufficient, record stock_orders first (use unit cost from instructions).
+3. Record sales for fulfilled items using sale prices from the quote.
+4. Use estimate_delivery_date for restock quantities when applicable.
+5. If cash is insufficient for restock, skip stock_orders and report the shortfall.
+6. Use exact catalog item_name values only.
+
+Transaction rules:
+- stock_orders price = restock_qty * unit_cost (supplier cost)
+- sales price = line_total from quote (revenue for that line)
+- transaction_type must be stock_orders or sales
+
+Output plain text only:
+REQUEST_DATE: <date>
+ORDER_STATUS: success | failed | partial
+TRANSACTIONS:
+- <type> | <item_name> | txn_id: <id> | qty: <n> | price: $<n>
+DELIVERY_ETA: <date or none>
+CASH_STATUS: $<balance> as of <date>
+NOTES: <errors or restock/cash notes>"""
+
+
+class OrderingAgent(ToolCallingAgent):
+    """Records sales and stock orders with cash validation."""
+
+    def __init__(self, llm_model: OpenAIModel):
+        super().__init__(
+            tools=[record_transaction, check_cash_balance, estimate_delivery_date],
+            model=llm_model,
+            name="ordering_agent",
+            description="Fulfills sales and supplier restocks with cash validation.",
+            instructions=ORDERING_AGENT_INSTRUCTIONS,
+            max_steps=15,
+        )
+
+
+def create_ordering_agent(llm_model: Optional[OpenAIModel] = None) -> OrderingAgent:
+    """Build an OrderingAgent using the shared project model."""
+    return OrderingAgent(llm_model or model)
+
+
 # Run your test scenarios by writing them here. Make sure to keep track of them.
 
 def run_test_scenarios():

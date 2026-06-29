@@ -591,7 +591,21 @@ def search_quote_history(search_terms: List[str], limit: int = 5) -> List[Dict]:
 
 # Set up and load your env parameters and instantiate your model.
 
+from smolagents import OpenAIModel, ToolCallingAgent, tool
 
+dotenv.load_dotenv()
+
+
+def create_llm_model() -> OpenAIModel:
+    """Shared LLM for all agents. api_base is required for Vocareum."""
+    return OpenAIModel(
+        model_id="gpt-4o-mini",
+        api_key=os.getenv("OPENAI_API_KEY"),
+        api_base=os.getenv("OPENAI_API_BASE"),
+    )
+
+
+model = create_llm_model()
 """Set up tools for your agents to use, these should be methods that combine the database functions above
  and apply criteria to them to ensure that the flow of the system is correct."""
 

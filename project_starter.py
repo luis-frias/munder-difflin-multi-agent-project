@@ -1,10 +1,12 @@
 import pandas as pd
 import numpy as np
 import os
+import re
 import time
 import json
 import dotenv
 import ast
+from concurrent.futures import ThreadPoolExecutor
 from sqlalchemy.sql import text
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Union
@@ -994,6 +996,108 @@ class Orchestrator:
             "complete your request."
         )
 
+    @staticmethod
+    def _is_specialist_error(result: str) -> bool:
+        return result.startswith("SPECIALIST_ERROR:")
+
+    @staticmethod
+    def _inventory_needs_restock(inv_report: str) -> bool:
+        lower = inv_report.lower()
+        return "sufficient_stock: no" in lower or "shortfall" in lower
+
+    @staticmethod
+    def _estimate_restock_cost(inv_report: str) -> float:
+        """Estimate supplier cost for restock lines in an inventory report."""
+        total = 0.0
+        for line in inv_report.splitlines():
+            if "restock_qty:" not in line.lower():
+                continue
+            qty_match = re.search(r"restock_qty:\s*(\d+)", line, re.IGNORECASE)
+            if not qty_match or int(qty_match.group(1)) == 0:
+                continue
+            qty = int(qty_match.group(1))
+            name_match = re.search(r"^-\s*([^|]+)", line.strip())
+            if not name_match:
+                continue
+            item_name = name_match.group(1).strip()
+            unit_price = next(
+                (item["unit_price"] for item in paper_supplies if item["item_name"] == item_name),
+                0.0,
+            )
+            total += qty * unit_price
+        return total
+
+    def _run_inventory_and_quoting(self, parsed: str, request_date: str) -> tuple[str, str]:
+        """Run inventory and quoting specialists in parallel."""
+        inv_handoff = (
+            f"Request date: {request_date}\nLine items:\n{parsed}\n"
+            "Report availability and restock needs."
+        )
+        quote_handoff = (
+            f"Request date: {request_date}\n"
+            f"Parsed line items:\n{parsed}\n"
+            "Build a priced quote with bulk discounts."
+        )
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            inv_future = executor.submit(self._delegate_with_retry, self.inventory, inv_handoff)
+            quote_future = executor.submit(self._delegate_with_retry, self.quoting, quote_handoff)
+            return inv_future.result(), quote_future.result()
+
+    def _build_ordering_handoff(
+        self, parsed: str, inv_report: str, quote_draft: str, request_date: str
+    ) -> str:
+        return (
+            f"Request date: {request_date}\n\n"
+            f"Parsed items:\n{parsed}\n\n"
+            f"Inventory report:\n{inv_report}\n\n"
+            f"Quote draft:\n{quote_draft}\n\n"
+            "Fulfill this order. Validate cash before stock_orders. "
+            "Place stock_orders for any positive restock_qty before sales when cash allows. "
+            "If cash is insufficient for restock, skip stock_orders but still record sales "
+            "for items that are in stock. Use exact item_name values and sale line totals "
+            "from the quote."
+        )
+
+    def _compose_failure_report(self, reason: str) -> str:
+        return (
+            "We were unable to complete your order at this time.\n\n"
+            f"Reason: {reason}\n\n"
+            "Please contact us to revise your order or try again later."
+        )
+
+    def _compose_customer_reply(
+        self,
+        quote_draft: str,
+        order_result: str,
+        inv_report: str,
+    ) -> str:
+        delivery_line = ""
+        for line in order_result.splitlines():
+            if line.upper().startswith("DELIVERY_ETA:"):
+                delivery_line = line.split(":", 1)[1].strip()
+                break
+
+        reply_parts = [
+            "Thank you for your order with Munder Difflin Paper Company!",
+            "",
+            "Quote Summary:",
+            quote_draft,
+            "",
+            "Order Confirmation:",
+            order_result,
+        ]
+        if delivery_line and delivery_line.lower() not in {"none", "n/a", ""}:
+            reply_parts.extend(["", f"Estimated delivery: {delivery_line}"])
+        if "shortfall" in inv_report.lower():
+            reply_parts.extend(
+                [
+                    "",
+                    "Availability note: Some items required restocking or had limited stock "
+                    "at the time of your request. See details above.",
+                ]
+            )
+        return "\n".join(reply_parts)
+
     def handle_request(self, raw_request: str, request_date: str) -> str:
         """Route a customer request through the multi-agent pipeline."""
         parser_handoff = (
@@ -1001,19 +1105,48 @@ class Orchestrator:
         )
         parsed = self._delegate_with_retry(self.parser, parser_handoff)
 
-        if parsed.startswith("SPECIALIST_ERROR:"):
-            return (
-                "We were unable to process your request due to a system error while "
-                f"parsing your order. Details: {parsed}"
+        if self._is_specialist_error(parsed):
+            return self._compose_failure_report(
+                f"Error while parsing your request. {parsed}"
             )
 
         if self._has_unresolved_items(parsed):
             return self._compose_clarification(parsed)
 
-        return (
-            "Your request was parsed successfully. Order processing pipeline is not yet "
-            "complete for this build step."
+        inv_report, quote_draft = self._run_inventory_and_quoting(parsed, request_date)
+
+        if self._is_specialist_error(inv_report):
+            return self._compose_failure_report(
+                f"Error while checking inventory. {inv_report}"
+            )
+        if self._is_specialist_error(quote_draft):
+            return self._compose_failure_report(
+                f"Error while building your quote. {quote_draft}"
+            )
+
+        if self._inventory_needs_restock(inv_report):
+            restock_cost = self._estimate_restock_cost(inv_report)
+            cash_available = get_cash_balance(request_date)
+            if restock_cost > 0 and cash_available < restock_cost:
+                return self._compose_failure_report(
+                    f"Insufficient cash (${cash_available:,.2f}) to restock required "
+                    f"items (estimated cost ${restock_cost:,.2f})."
+                )
+
+        ordering_handoff = self._build_ordering_handoff(
+            parsed, inv_report, quote_draft, request_date
         )
+        order_result = self._delegate_with_retry(self.ordering, ordering_handoff)
+
+        if self._is_specialist_error(order_result):
+            return self._compose_failure_report(
+                f"Error while processing your order. {order_result}"
+            )
+
+        if "ORDER_STATUS: failed" in order_result.lower():
+            return self._compose_failure_report(order_result)
+
+        return self._compose_customer_reply(quote_draft, order_result, inv_report)
 
 
 # Run your test scenarios by writing them here. Make sure to keep track of them.

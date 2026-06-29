@@ -7,7 +7,7 @@ import dotenv
 import ast
 from sqlalchemy.sql import text
 from datetime import datetime, timedelta
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 from sqlalchemy import create_engine, Engine
 
 # Create an SQLite database
@@ -772,6 +772,50 @@ def estimate_delivery_date(input_date: str, quantity: int) -> str:
 
 # Set up your agents and create an orchestration agent that will manage them.
 
+REQUEST_PARSER_INSTRUCTIONS = """You are the Request Parser / Item Mapper for Munder Difflin Paper Company.
+
+Your job is to read a customer request and produce structured text for downstream agents.
+
+Always call list_catalog_items first to see valid exact item_name values.
+
+For each requested product:
+1. Map colloquial names to the exact catalog item_name (case-sensitive).
+2. Extract quantity as an integer number of units/sheets/rolls.
+3. If no confident catalog match exists, add a line: UNRESOLVED: <customer wording>
+
+Include when present:
+- REQUEST_DATE: from the prompt (YYYY-MM-DD)
+- DELIVERY_DEADLINE: customer deadline text or date
+- JOB_CONTEXT: job, event, or occasion mentioned
+
+Output format (plain text only):
+REQUEST_DATE: <date>
+DELIVERY_DEADLINE: <deadline>
+JOB_CONTEXT: <context>
+ITEMS:
+- <exact item_name> | qty: <integer>
+- UNRESOLVED: <name>   (only for items that cannot be mapped)
+
+Use only item_name values from the catalog tool. Do not invent items or prices."""
+
+
+class RequestParserAgent(ToolCallingAgent):
+    """Maps natural-language requests to exact catalog item names."""
+
+    def __init__(self, llm_model: OpenAIModel):
+        super().__init__(
+            tools=[list_catalog_items],
+            model=llm_model,
+            name="request_parser",
+            description="Parses customer requests and maps colloquial names to exact catalog items.",
+            instructions=REQUEST_PARSER_INSTRUCTIONS,
+            max_steps=10,
+        )
+
+
+def create_request_parser_agent(llm_model: Optional[OpenAIModel] = None) -> RequestParserAgent:
+    """Build a RequestParserAgent using the shared project model."""
+    return RequestParserAgent(llm_model or model)
 
 # Run your test scenarios by writing them here. Make sure to keep track of them.
 

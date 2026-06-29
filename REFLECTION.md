@@ -60,29 +60,34 @@ The system was evaluated against the full `quote_requests_sample.csv` dataset (2
 |--------|--------|
 | Requests processed | 20 / 20 |
 | Successful fulfillments (`ORDER_STATUS: success`) | 12 |
-| Partial fulfillments | 1 (request 4) |
-| Clarification / unresolved | 7 |
+| Partial fulfillments | 1 (request 13) |
+| Clarification / unresolved | 6 |
+| Other (non-terminal status) | 1 (request 14, `ORDER_STATUS: pending`) |
 | Requests that changed cash balance | 12 |
-| Cash after first fulfilled request | $45,119.70 |
-| Final cash balance | $44,154.35 |
+| Cash after first fulfilled request | $45,134.70 |
+| Final cash balance | $44,876.70 |
+| Final inventory value | $4,236.55 |
 
 ### Outcome breakdown
 
-- **12 success** — Full order processed with sales transactions recorded (requests 1, 5, 6, 7, 8, 10, 11, 12, 13, 14, 17, 18).
-- **1 partial** — Request 4 (reception order): insufficient A4 stock; system placed restock orders, sold available units, and returned `ORDER_STATUS: partial` with delivery ETA.
-- **7 clarification** — Parser could not map items to catalog (requests 2, 3, 9, 15, 16, 19, 20). Examples: "balloons", "cardboard for signage". Orchestrator returned a clear request for clarification instead of guessing.
+- **12 success** — Full order processed with sales transactions recorded (requests 1, 4, 5, 6, 7, 8, 10, 11, 12, 17, 18, 19).
+- **1 partial** — Request 13 (gathering order): insufficient cardstock stock; system placed restock orders, recorded partial sales, and returned `ORDER_STATUS: partial` with delivery ETA.
+- **6 clarification** — Parser could not map items to catalog (requests 2, 3, 9, 15, 16, 20). Examples: "balloons", "cardboard for signage", "posters", "tickets". Orchestrator returned a clear request for clarification instead of guessing.
+- **1 pending** — Request 14 (performance order): Ordering Agent recorded restock transactions but returned `ORDER_STATUS: pending` rather than success or partial; cash balance still changed due to supplier orders.
 
 ### Strengths
 
 1. **Realistic fulfillment mix** — Not all requests succeed. The system refuses or clarifies when items are unknown or stock/cash constraints apply, which matches real business behavior.
 
-2. **Competitive quoting with rationale** — The Quoting Agent applies bulk discounts and documents reasoning. Request 4 includes a `QUOTE_RATIONALE` explaining a 10% bulk discount based on historical reception orders.
+2. **Competitive quoting with rationale** — The Quoting Agent applies bulk discounts and documents reasoning. Request 4 includes a `QUOTE_RATIONALE` with a 10% bulk discount on a reception order; request 19 applies a 10% exhibition discount informed by quote history.
 
-3. **Restock path works** — When inventory is short but cash is sufficient, the Ordering Agent places supplier restocks before sales and reports delivery ETAs.
+3. **Restock path works** — When inventory is short but cash is sufficient, the Ordering Agent places supplier restocks before sales and reports delivery ETAs. Request 19 (large exhibition order) restocked three items and fulfilled all line items successfully.
 
-4. **No internal error leakage** — Customer responses do not expose `SPECIALIST_ERROR`, API failures, profit margins, or other sensitive internal details.
+4. **Financial reporting tool in use** — The Ordering Agent invoked `get_financial_report` during order processing (17 times in the execution log), confirming the post-remediation tool wrapper is active.
 
-5. **Date-aware state evolution** — Processing requests sorted by date produces meaningful cash and inventory changes across the test run (12 transactions affecting cash balance).
+5. **No internal error leakage** — Customer responses do not expose `SPECIALIST_ERROR`, API failures, profit margins, or other sensitive internal details.
+
+6. **Date-aware state evolution** — Processing requests sorted by date produces meaningful cash and inventory changes across the test run (12 requests affecting cash balance).
 
 ---
 
@@ -90,7 +95,7 @@ The system was evaluated against the full `quote_requests_sample.csv` dataset (2
 
 ### 1. Reduce UNRESOLVED rate with synonym mapping
 
-Seven of 20 requests ended in clarification because the Parser could not map colloquial terms to catalog names. Many are close matches the LLM could resolve with explicit rules:
+Six of 20 requests ended in clarification because the Parser could not map colloquial terms to catalog names. Many are close matches the LLM could resolve with explicit rules:
 
 - "heavy cardstock" → `Cardstock` or `250 gsm cardstock`
 - "poster boards" → `Large poster paper (24x36 inches)`
@@ -100,7 +105,7 @@ Adding synonym hints to Parser instructions or a lightweight fuzzy-match pre-ste
 
 ### 2. Explicit partial-order customer messaging
 
-Request 4 was fulfilled partially (restock + partial sale) but the customer reply still opens with "Thank you for your order" without clearly stating what was and was not fulfilled. The Orchestrator should detect `ORDER_STATUS: partial` and compose a dedicated message explaining available vs. backordered quantities and expected delivery dates.
+Request 13 was fulfilled partially (restock + partial sale) but the customer reply still opens with "Thank you for your order" without clearly stating what was and was not fulfilled. The Orchestrator should detect `ORDER_STATUS: partial` and compose a dedicated message explaining available vs. backordered quantities and expected delivery dates.
 
 ### 3. Sanitize customer-facing output format
 

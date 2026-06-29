@@ -1,551 +1,555 @@
 request_id,request_date,cash_balance,inventory_value,response
-1,2025-04-01,45119.7,4880.3,"Thank you for your order with Munder Difflin Paper Company!
+1,2025-04-01,45134.7,4865.3,"Thank you for your order with Munder Difflin Paper Company!
 
 Quote Summary:
-Based on the provided prices and quantities, here is the priced quote for the requested items, along with calculations for bulk discounts:
-
-### Pricing Information
-| Item                  | Unit Price | Quantity | Total Price |
-|-----------------------|------------|----------|-------------|
-| A4 paper              | $0.05      | 200      | $10.00      |
-| Glossy paper          | $0.20      | 200      | $40.00      |
-| 250 gsm cardstock     | $0.30      | 100      | $30.00      |
-| Colored paper         | $0.10      | 100      | $10.00      |
-| **Subtotal**          |            |          | **$90.00**  |
-
-### Bulk Discounts
-Assuming a bulk discount structure typically applied for large orders (let's apply a 10% discount on orders over $75):
-
-- **Bulk Discount**: 10% of $90.00 = $9.00
-
-### Final Quote
-| Description           | Amount      |
-|-----------------------|-------------|
-| Subtotal              | $90.00      |
-| Bulk Discount         | -$9.00      |
-| **Total**             | **$81.00**  |
-
-### Summary
-- **Request Date**: April 1, 2025
-- **Delivery Deadline**: April 15, 2025
-- **Total Amount Due**: $81.00
-
-Please let me know if you need any further adjustments or if you would like to proceed with this quote!
+REQUEST_DATE: 2025-04-01
+JOB_CONTEXT: ceremony
+LINE_ITEMS:
+- A4 paper | qty: 200 | unit_price: $0.05 | line_total: $10.00 | discount: None
+- Glossy paper | qty: 200 | unit_price: $0.20 | line_total: $40.00 | discount: None
+- Cardstock | qty: 100 | unit_price: $0.15 | line_total: $15.00 | discount: None
+- Colored paper | qty: 100 | unit_price: $0.10 | line_total: $10.00 | discount: None
+SUBTOTAL: $75.00
+BULK_DISCOUNT: $0.00 (0%)
+TOTAL: $75.00
+QUOTE_RATIONALE: No historical quotes available; standard prices applied for all items.
 
 Order Confirmation:
 REQUEST_DATE: 2025-04-01
 ORDER_STATUS: success
 TRANSACTIONS:
-- sales | A4 paper | txn_id: 20 | qty: 200 | price: $10
-- sales | Glossy paper | txn_id: 0 | qty: 200 | price: $40
-- sales | Colored paper | txn_id: 0 | qty: 100 | price: $10
-DELIVERY_ETA: none
-CASH_STATUS: $45059.70 as of 2025-04-01
-NOTES: none"
-2,2025-04-03,45119.7,4880.3,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
+- sales | Colored paper | txn_id: 20 | qty: 100 | price: $10.00
+- sales | Cardstock | txn_id: 20 | qty: 100 | price: $15.00
+- sales | Glossy paper | txn_id: 20 | qty: 200 | price: $40.00
+- sales | A4 paper | txn_id: 21 | qty: 200 | price: $10.00
+CASH_STATUS: $45134.70 as of 2025-04-01
+NOTES: None"
+2,2025-04-03,45134.7,4865.3,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
 
 The following items could not be matched to our catalog:
 - UNRESOLVED: balloons
 
 Please reply with exact product names or clearer descriptions so we can complete your request."
-3,2025-04-04,45119.7,4880.3,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
+3,2025-04-04,45134.7,4865.3,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
 
 The following items could not be matched to our catalog:
 - UNRESOLVED: A3 paper
 - UNRESOLVED: printer paper
 
 Please reply with exact product names or clearer descriptions so we can complete your request."
-4,2025-04-05,44964.4,4885.599999999999,"Thank you for your order with Munder Difflin Paper Company!
+4,2025-04-05,45129.05,4870.95,"Thank you for your order with Munder Difflin Paper Company!
 
 Quote Summary:
 REQUEST_DATE: 2025-04-05
 JOB_CONTEXT: reception
 LINE_ITEMS:
-- A4 paper | qty: 250 | unit_price: $0.05 | line_total: $12.50 | discount: None
-- 250 gsm cardstock | qty: 500 | unit_price: $0.30 | line_total: $150.00 | discount: 10% bulk discount
+- A4 paper | qty: 250 | unit_price: $0.05 | line_total: $12.50 | discount: none
+- 250 gsm cardstock | qty: 500 | unit_price: $0.30 | line_total: $150.00 | discount: none
 SUBTOTAL: $162.50
-BULK_DISCOUNT: $15.25 (10%)
-TOTAL: $147.25
-QUOTE_RATIONALE: Based on historical quotes for similar reception orders and the unit prices retrieved, a bulk discount of 10% was applied since the order exceeds standard quantities.
-
-Order Confirmation:
-REQUEST_DATE: 2025-04-05
-ORDER_STATUS: partial
-TRANSACTIONS:
-- stock_orders | 250 gsm cardstock | txn_id: 21 | qty: 500 | price: $150.00
-- stock_orders | A4 paper | txn_id: 20 | qty: 178 | price: $8.90
-- sales | A4 paper | txn_id: 20 | qty: 72 | price: $3.60
-DELIVERY_ETA: 2025-04-09
-CASH_STATUS: $45,119.70 as of 2025-04-05
-NOTES: Sold 72 units of A4 paper, 178 units of A4 paper and 500 units of 250 gsm cardstock were ordered to fulfill the request.
-
-Estimated delivery: 2025-04-09"
-5,2025-04-05,45019.4,4790.599999999999,"Thank you for your order with Munder Difflin Paper Company!
-
-Quote Summary:
-REQUEST_DATE: 2025-04-05
-JOB_CONTEXT: upcoming party
-LINE_ITEMS:
-- Colored paper | qty: 500 | unit_price: $0.10 | line_total: $50.00 | discount: 10% bulk discount
-- Cardstock | qty: 300 | unit_price: $0.15 | line_total: $45.00 | discount: 10% bulk discount
-- Decorative adhesive tape (washi tape) | qty: 200 | unit_price: $0.20 | line_total: $40.00 | discount: None
-SUBTOTAL: $135.00
-BULK_DISCOUNT: $15.00 (10%)
-TOTAL: $120.00
-QUOTE_RATIONALE: The quote is based on standard unit prices with applied bulk discounts for the colored paper and cardstock due to large quantities ordered. The total is rounded for a friendly dollar amount.
+BULK_DISCOUNT: $16.25 (10%)
+TOTAL: $146.25
+QUOTE_RATIONALE: Standard unit pricing was applied with a bulk discount of 10% for ordering over 400 items in total.
 
 Order Confirmation:
 REQUEST_DATE: 2025-04-05
 ORDER_STATUS: success
 TRANSACTIONS:
-- sales | Cardstock | txn_id: 27 | qty: 300 | price: $45.00
-- stock_orders | Decorative adhesive tape (washi tape) | txn_id: 26 | qty: 200 | price: $40.00
-- sales | Colored paper | txn_id: 24 | qty: 500 | price: $50.00
+- stock_orders | A4 paper | txn_id: 21 | qty: 363 | price: $18.15
+- stock_orders | 250 gsm cardstock | txn_id: 22 | qty: 500 | price: $150.00
+- sales | A4 paper | txn_id: 21 | qty: 250 | price: $12.50
+- sales | 250 gsm cardstock | txn_id: 25 | qty: 500 | price: $150.00
 DELIVERY_ETA: 2025-04-09
-CASH_STATUS: $44,964.40 as of 2025-04-05
+CASH_STATUS: $45,129.05 as of 2025-04-05
+NOTES: None
+
+Estimated delivery: 2025-04-09"
+5,2025-04-05,45176.8,4775.95,"Thank you for your order with Munder Difflin Paper Company!
+
+Quote Summary:
+Based on your request for the upcoming party supplies, here's the priced quote including potential bulk discounts:
+
+### Quote for Party Supplies
+
+#### Items Requested:
+
+1. **Colored Paper**
+   - Quantity: 500 sheets
+   - Unit Price: $0.10
+   - Total: 500 sheets * $0.10/sheet = **$50.00**
+
+2. **Cardstock**
+   - Quantity: 300 sheets
+   - Unit Price: $0.15
+   - Total: 300 sheets * $0.15/sheet = **$45.00**
+
+3. **Decorative Adhesive Tape (Washi Tape)**
+   - Quantity: 200 rolls
+   - Unit Price: $0.20
+   - Total: 200 rolls * $0.20/roll = **$40.00**
+
+### Subtotal:
+- Total Before Discounts = $50.00 + $45.00 + $40.00 = **$135.00**
+
+### Bulk Discounts Applied:
+- **Colored Paper:** Offering a 10% discount for quantities over 400 sheets.
+   - Discount: $50.00 * 10% = **$5.00**
+   - New total for Colored Paper: $50.00 - $5.00 = **$45.00**
+
+- **Cardstock:** Offering a 5% discount for quantities over 200 sheets.
+   - Discount: $45.00 * 5% = **$2.25**
+   - New total for Cardstock: $45.00 - $2.25 = **$42.75**
+
+- **Washi Tape:** No discount applied as the quantity is under the bulk threshold.
+
+### Final Total Calculation:
+1. **Colored Paper Total:** $45.00
+2. **Cardstock Total:** $42.75
+3. **Washi Tape Total:** $40.00
+
+**Final Total After Discounts:**
+- $45.00 + $42.75 + $40.00 = **$127.75**
+
+### Summary:
+- **Total Due:** **$127.75**
+- **Delivery Deadline:** April 15, 2025
+
+Thank you for your order! Please let me know if you need any further assistance or adjustments to this quote.
+
+Order Confirmation:
+REQUEST_DATE: 2025-04-05
+ORDER_STATUS: success
+TRANSACTIONS:
+- sales | Cardstock | txn_id: 28 | qty: 300 | price: $42.75
+- sales | Colored paper | txn_id: 25 | qty: 500 | price: $45.00
+- stock_orders | Decorative adhesive tape (washi tape) | txn_id: 25 | qty: 200 | price: $40.00
+DELIVERY_ETA: 2025-04-09
+CASH_STATUS: $45176.80 as of 2025-04-05
 NOTES: None
 
 Estimated delivery: 2025-04-09
 
 Availability note: Some items required restocking or had limited stock at the time of your request. See details above."
-6,2025-04-06,45053.799999999996,4757.8,"Thank you for your order with Munder Difflin Paper Company!
+6,2025-04-06,45176.8,4775.95,"Thank you for your order with Munder Difflin Paper Company!
 
 Quote Summary:
-Here is a priced quote for your request with bulk discounts applied:
-
-### Priced Quote for Upcoming Assembly
-**Request Date:** April 6, 2025  
-**Delivery Deadline:** April 15, 2025  
-
-#### Items:
-1. **Construction Paper**
-   - Quantity: 500
-   - Unit Price: $0.07
-   - Total: $35.00
-   - **Bulk Discount Applied:** 10% 
-   - Discounted Total: $31.50
-   
-2. **A4 Paper**
-   - Quantity: 300
-   - Unit Price: $0.05
-   - Total: $15.00
-   - **Bulk Discount Applied:** 10% 
-   - Discounted Total: $13.50
-  
-3. **Cardstock**
-   - Quantity: 200
-   - Unit Price: $0.15
-   - Total: $30.00
-   - **Bulk Discount Applied:** 10% 
-   - Discounted Total: $27.00
-
-### Summary of Costs:
-- **Construction Paper:** $31.50
-- **A4 Paper:** $13.50
-- **Cardstock:** $27.00
-
-### **Total Quote: $72.00**
-
-If you have any further questions or need adjustments to the quote, feel free to ask!
+REQUEST_DATE: 2025-04-06
+JOB_CONTEXT: upcoming assembly
+LINE_ITEMS:
+- Construction paper | qty: 500 | unit_price: $0.07 | line_total: $35.00 | discount: None
+- Standard copy paper | qty: 300 | unit_price: $0.04 | line_total: $12.00 | discount: None
+- 250 gsm cardstock | qty: 200 | unit_price: $0.30 | line_total: $60.00 | discount: None
+SUBTOTAL: $107.00
+BULK_DISCOUNT: $0.00 (0%)
+TOTAL: $107.00
+QUOTE_RATIONALE: No historical quotes found; standard prices applied without discounts.
 
 Order Confirmation:
 REQUEST_DATE: 2025-04-06
 ORDER_STATUS: success
 TRANSACTIONS:
-- stock_orders | A4 paper | txn_id: 30 | qty: 122 | price: $6.10
-- sales | Cardstock | txn_id: 27 | qty: 200 | price: $27.00
-- sales | A4 paper | txn_id: 26 | qty: 178 | price: $13.50
+- stock_orders | Construction paper | txn_id: 28 | qty: 500 | price: $35.00
+- stock_orders | Standard copy paper | txn_id: 28 | qty: 300 | price: $12.00
+- stock_orders | 250 gsm cardstock | txn_id: 31 | qty: 200 | price: $60.00
+- sales | Construction paper | txn_id: 28 | qty: 500 | price: $35.00
+- sales | Standard copy paper | txn_id: 34 | qty: 300 | price: $12.00
+- sales | 250 gsm cardstock | txn_id: 28 | qty: 200 | price: $60.00
 DELIVERY_ETA: 2025-04-10
-CASH_STATUS: $45,053.80 as of 2025-04-06
-NOTES: None
+CASH_STATUS: $45176.80 as of 2025-04-06
+NOTES: Restock completed for all requested items, estimated delivery is on April 10, 2025.
 
-Estimated delivery: 2025-04-10
+Estimated delivery: 2025-04-10"
+7,2025-04-07,45826.4,4066.35,"Thank you for your order with Munder Difflin Paper Company!
+
+Quote Summary:
+REQUEST_DATE: 2025-04-07
+JOB_CONTEXT: upcoming exhibition
+LINE_ITEMS:
+- Glossy paper | qty: 500 | unit_price: $0.20 | line_total: $100.00 | discount: 5% for bulk
+- Matte paper | qty: 1000 | unit_price: $0.18 | line_total: $180.00 | discount: 5% for bulk
+- Large poster paper (24x36 inches) | qty: 300 | unit_price: $1.00 | line_total: $300.00 | discount: 10% for bulk
+- 250 gsm cardstock | qty: 200 | unit_price: $0.30 | line_total: $60.00 | discount: 5% for bulk
+SUBTOTAL: $640.00
+BULK_DISCOUNT: $84.00 (10%)
+TOTAL: $556.00
+QUOTE_RATIONALE: Standard pricing applied with bulk discounts for larger quantities.
+
+Order Confirmation:
+REQUEST_DATE: 2025-04-07
+ORDER_STATUS: success
+TRANSACTIONS:
+- stock_orders | Glossy paper | txn_id: 36 | qty: 113 | price: $22.60
+- sales | Large poster paper (24x36 inches) | txn_id: 40 | qty: 300 | price: $270.00
+- sales | Glossy paper | txn_id: 28 | qty: 387 | price: $77.40
+DELIVERY_ETA: 2025-04-11
+CASH_STATUS: $45826.40 as of 2025-04-07
+NOTES: Restock for Glossy paper has been ordered.
+
+Estimated delivery: 2025-04-11
 
 Availability note: Some items required restocking or had limited stock at the time of your request. See details above."
-7,2025-04-07,45091.2,4480.4,"Thank you for your order with Munder Difflin Paper Company!
+8,2025-04-07,45588.100000000006,4304.65,"Thank you for your order with Munder Difflin Paper Company!
 
 Quote Summary:
-Here's the priced quote for your order, including bulk discounts based on the quantities requested:
-
-### Priced Quote
-
-**Request Date:** April 7, 2025  
-**Delivery Deadline:** April 15, 2025  
-**Job Context:** Exhibition  
-
-#### Items and Pricing
-1. **Glossy Paper**  
-   - Quantity: 500  
-   - Unit Price: $0.20  
-   - Total: 500 x $0.20 = **$100.00**  
-
-2. **Matte Paper**  
-   - Quantity: 1000  
-   - Unit Price: $0.18  
-   - Total: 1000 x $0.18 = **$180.00**  
-
-3. **Large Poster Paper (24x36 inches)**  
-   - Quantity: 300  
-   - Unit Price: $1.00  
-   - Total: 300 x $1.00 = **$300.00**  
-
-4. **250 gsm Cardstock**  
-   - Quantity: 200  
-   - Unit Price: $0.30  
-   - Total: 200 x $0.30 = **$60.00**  
-
-### Subtotal Calculation
-- Glossy Paper Total: $100.00  
-- Matte Paper Total: $180.00  
-- Large Poster Paper Total: $300.00  
-- Cardstock Total: $60.00  
-
-**Subtotal:**  
-$100.00 + $180.00 + $300.00 + $60.00 = **$640.00**
-
-### Bulk Discounts
-For large quantities, we can apply a 10% discount, as the order exceeds 500 units in total across multiple items. 
-
-**Discount:**  
-10% of $640.00 = $64.00
-
-### Final Total
-**Total After Discount:**  
-$640.00 - $64.00 = **$576.00**
-
-### Summary
-- **Total:** $576.00  
-- **Delivery Deadline:** April 15, 2025  
-
-Thank you for considering our services for your exhibition! If you have any further questions or need adjustments, feel free to ask.
+REQUEST_DATE: 2025-04-07
+JOB_CONTEXT: upcoming ceremony
+LINE_ITEMS:
+- Glossy paper | qty: 500 | unit_price: $0.20 | line_total: $100.00 | discount: None
+- Matte paper | qty: 1000 | unit_price: $0.18 | line_total: $180.00 | discount: None
+- Colored paper | qty: 2000 | unit_price: $0.10 | line_total: $200.00 | discount: None
+- Recycled paper | qty: 3000 | unit_price: $0.08 | line_total: $240.00 | discount: 10% (bulk)
+SUBTOTAL: $720.00
+BULK_DISCOUNT: $24.00 (10%)
+TOTAL: $696.00
+QUOTE_RATIONALE: No historical quotes were found; standard unit prices were used with a 10% discount applied for bulk order.
 
 Order Confirmation:
 REQUEST_DATE: 2025-04-07
 ORDER_STATUS: success
 TRANSACTIONS:
-- stock_orders | Glossy paper | txn_id: 30 | qty: 113 | price: $22.60
-- stock_orders | 250 gsm cardstock | txn_id: 33 | qty: 200 | price: $60.00
-- sales | Large poster paper (24x36 inches) | txn_id: 34 | qty: 300 | price: $300.00
-- stock_orders | Matte paper | txn_id: 35 | qty: 1000 | price: $180.00
+- stock_orders | Glossy paper | txn_id: 43 | qty: 808 | price: $161.60
+- sales | Matte paper | txn_id: 44 | qty: 1000 | price: $180.00
+- stock_orders | Matte paper | txn_id: 44 | qty: 1000 | price: $180.00
+- sales | Colored paper | txn_id: 43 | qty: 188 | price: $18.80
+- stock_orders | Colored paper | txn_id: 43 | qty: 1955 | price: $195.50
+- sales | Glossy paper | txn_id: 45 | qty: 500 | price: $100.00
 DELIVERY_ETA: 2025-04-11
-CASH_STATUS: $45,053.80 as of 2025-04-07
-NOTES: Restock orders placed for Glossy paper, Matte paper, and 250 gsm cardstock. Delivery expected by April 11, 2025.
+CASH_STATUS: $44,913.60 as of 2025-04-07
+NOTES: Recycled paper not in catalog.
 
-Estimated delivery: 2025-04-11"
-8,2025-04-07,44377.2,4774.4,"Thank you for your order with Munder Difflin Paper Company!
+Estimated delivery: 2025-04-11
 
-Quote Summary:
-Here’s a detailed quote based on the requested items, their quantities, unit prices, and applicable bulk discounts. The following calculations do not include a specific discount rate, but rather a standard pricing with total sums calculated for bulk orders.
-
-### Quote for Upcoming Ceremony
-**Request Date**: April 7, 2025  
-**Delivery Deadline**: April 15, 2025
-
-#### Line Items
-| Item            | Quantity | Unit Price | Total Price    |
-|------------------|----------|-------------|----------------|
-| A4 Paper         | 500      | $0.05      | $25.00         |
-| Glossy Paper     | 500      | $0.20      | $100.00        |
-| A4 Paper         | 1000     | $0.05      | $50.00         |
-| Matte Paper      | 1000     | $0.18      | $180.00        |
-| A5 Paper         | 2000     | N/A         | N/A            |
-| Colored Paper     | 2000     | $0.10      | $200.00        |
-| A4 Paper         | 3000     | $0.05      | $150.00        |
-| Recycled Paper   | 3000     | $0.08      | $240.00        |
-
-### Total Calculation
-- A4 Paper: 500 + 1000 + 3000 = **4500 units**
-- Glossy Paper: **500 units**
-- Matte Paper: **1000 units**
-- Colored Paper: **2000 units**
-- Recycled Paper: **3000 units**
-
-### Summary Costs
-- **Total for A4 Paper (4500 units):** $25.00 + $50.00 + $150.00 = $225.00
-- **Total for Glossy Paper (500 units):** $100.00
-- **Total for Matte Paper (1000 units):** $180.00
-- **Total for Colored Paper (2000 units):** $200.00
-- **Total for Recycled Paper (3000 units):** $240.00
-
-#### Grand Total:
-- A4 Paper Total: $225.00
-- Glossy Paper Total: $100.00
-- Matte Paper Total: $180.00
-- Colored Paper Total: $200.00
-- Recycled Paper Total: $240.00
-
-### Overall Total Price: 
-**$1,025.00**
-
-#### Notes:
-- **A5 Paper**: Pricing for A5 paper is not available at this time and has been excluded from the total.
-- **Bulk Discounts**: Depending on your organization’s policy, we may apply bulk discounts for quantities exceeding specified amounts. Please confirm if we should consider a discount.
-- **Payment Terms**: Payment method and terms will be discussed upon order confirmation.
-- **Validity**: Please confirm the order within 7 days for validity of quoted prices.
-
-Thank you for considering us for your needs related to the upcoming ceremony! Let us know if you have any further questions or adjustments.
-
-Order Confirmation:
-REQUEST_DATE: 2025-04-07
-ORDER_STATUS: success
-TRANSACTIONS:
-- stock_orders | A4 paper | txn_id: 36 | qty: 4378 | price: $218.90
-- stock_orders | Recycled paper | txn_id: 36 | qty: 3000 | price: $240.00
-- stock_orders | Matte paper | txn_id: 37 | qty: 1000 | price: $180.00
-- stock_orders | Colored paper | txn_id: 38 | qty: 1812 | price: $181.20
-- sales | Glossy paper | txn_id: 36 | qty: 500 | price: $100.00
-- sales | A4 paper | txn_id: 40 | qty: 122 | price: $6.10
-DELIVERY_ETA: none
-CASH_STATUS: $44,157.10 as of 2025-04-07
-NOTES: All restock orders placed successfully."
-9,2025-04-07,44377.2,4774.4,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
+Availability note: Some items required restocking or had limited stock at the time of your request. See details above."
+9,2025-04-07,45588.100000000006,4304.65,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
 
 The following items could not be matched to our catalog:
 - UNRESOLVED: 100% recycled kraft paper envelopes
 
 Please reply with exact product names or clearer descriptions so we can complete your request."
-13,2025-04-08,44402.2,4749.4,"Thank you for your order with Munder Difflin Paper Company!
+13,2025-04-08,45560.850000000006,4301.9,"Thank you for your order with Munder Difflin Paper Company!
 
 Quote Summary:
-**Priced Quote for Upcoming Gathering**
+REQUEST_DATE: 2025-04-08
+JOB_CONTEXT: upcoming gathering
+LINE_ITEMS:
+- A4 paper | qty: 500 | unit_price: $0.05 | line_total: $25.00 | discount: None
+- cardstock | qty: 200 | unit_price: $0.15 | line_total: $30.00 | discount: None
+SUBTOTAL: $55.00
+BULK_DISCOUNT: $5.00 (9%)
+TOTAL: $50.00
+QUOTE_RATIONALE: Based on previous quotes for similar orders at bulk pricing.
 
-**Request Date:** April 8, 2025  
-**Delivery Deadline:** April 10, 2025  
-**Job Context:** Upcoming Gathering
+Order Confirmation:
+REQUEST_DATE: 2025-04-08
+ORDER_STATUS: partial
+TRANSACTIONS:
+- stock_orders | cardstock | txn_id: 43 | qty: 200 | price: $30.00
+- stock_orders | A4 paper | txn_id: 44 | qty: 315 | price: $15.75
+- sales | A4 paper | txn_id: 50 | qty: 185 | price: $9.25
+- sales | cardstock | txn_id: 52 | qty: 0 | price: $0.00
+DELIVERY_ETA: 2025-04-12
+CASH_STATUS: $45,588.10 as of 2025-04-08
+NOTES: Required restock for 200 cardstock and 315 A4 paper, partial fulfillment achieved.
 
-**Items:**
-1. **A4 Paper**
-   - Quantity: 500 sheets
-   - Unit Price: $0.05 per sheet
-   - Total Before Discount: $0.05 * 500 = $25.00
+Estimated delivery: 2025-04-12"
+12,2025-04-08,45577.850000000006,4281.9,"Thank you for your order with Munder Difflin Paper Company!
 
-2. **Cardstock**
-   - Quantity: 200 sheets
-   - Unit Price: Not available. 
-   - *Assuming a typical price for cardstock is $0.15 per sheet (this can be adjusted based on actual price)*
-   - Estimated Total Before Discount: $0.15 * 200 = $30.00
+Quote Summary:
+Based on the provided information, here is a priced quote for the requested items with quantities and their respective unit prices, along with bulk discounts:
 
-**Subtotal Before Discounts:**
-- A4 Paper: $25.00
-- Cardstock: $30.00
-- **Total Before Discounts: $55.00**
+### Quote for Upcoming Party Supplies
+**Request Date**: April 8, 2025  
+**Delivery Deadline**: April 15, 2025  
 
-**Bulk Discount:**
-- As this is a bulk order for an upcoming gathering, we offer a bulk discount.
-- **Discount Applied: $5.00**
-  
-**Final Total:**
-- **Total After Discount: $50.00**
+| Item                   | Quantity | Unit Price | Total Price  |
+|------------------------|----------|------------|--------------|
+| Colored paper          | 200      | $0.10      | $20.00       |
+| Standard copy paper    | 500      | $0.04      | $20.00       |
+| Paper napkins          | 100      | $0.02      | $2.00        |
+| **Subtotal**           |          |            | **$42.00**   |
 
-Thank you for considering this quote! We look forward to supporting your upcoming gathering. Please let us know if you would like to proceed with the order or if you need any adjustments.
+### Bulk Discounts:
+- **Colored Paper**: 10% discount on orders over 100 units 
+- **Standard Copy Paper**: 5% discount on orders over 400 units
+- **Paper Napkins**: No discount available
+
+### Discount Calculations:
+1. **Colored Paper**: $20.00 - 10% = $18.00
+2. **Standard Copy Paper**: $20.00 - 5% = $19.00
+3. **Paper Napkins**: No discount = $2.00
+
+### Final Pricing:
+| Item                   | Quantity | Unit Price | Discounted Price | Total Price |
+|------------------------|----------|------------|------------------|-------------|
+| Colored paper          | 200      | $0.10      | $0.09            | $18.00      |
+| Standard copy paper    | 500      | $0.04      | $0.038           | $19.00      |
+| Paper napkins          | 100      | $0.02      | $0.02            | $2.00       |
+| **Total Amount Due**   |          |            |                  | **$39.00**  |
+
+### Summary:
+- **Total Amount Due**: $39.00
+- **Payment Terms**: Full payment due upon receipt.
+- **Delivery Information**: Ensure items are received by April 15, 2025.
+
+Please let us know if you would like to proceed with this order or if there are any modifications needed!
 
 Order Confirmation:
 REQUEST_DATE: 2025-04-08
 ORDER_STATUS: success
 TRANSACTIONS:
-- sales | A4 paper | txn_id: 40 | qty: 500 | price: $25.00
-DELIVERY_ETA: none
-CASH_STATUS: $44377.20 as of 2025-04-08
-NOTES: The cardstock is not in catalog, hence it could not be ordered."
-12,2025-04-08,44462.2,4749.4,"Thank you for your order with Munder Difflin Paper Company!
+- stock_orders | Standard copy paper | txn_id: 50 | qty: 500 | price: $20.00
+- stock_orders | Paper napkins | txn_id: 54 | qty: 100 | price: $2.00
+- sales | Colored paper | txn_id: 56 | qty: 200 | price: $18.00
+- sales | Standard copy paper | txn_id: 57 | qty: 500 | price: $19.00
+- sales | Paper napkins | txn_id: 55 | qty: 100 | price: $2.00
+DELIVERY_ETA: 2025-04-12
+CASH_STATUS: $45,577.85 as of 2025-04-08
+NOTES: None.
+
+Estimated delivery: 2025-04-12
+
+Availability note: Some items required restocking or had limited stock at the time of your request. See details above."
+10,2025-04-08,45550.15000000001,4309.599999999999,"Thank you for your order with Munder Difflin Paper Company!
+
+Quote Summary:
+Here’s a priced quote for your order of paper supplies for the upcoming show, including bulk discounts:
+
+### Quote for Paper Supplies
+**Request Date:** April 8, 2025  
+**Delivery Deadline:** April 15, 2025
+
+**Items:**
+1. **Glossy Paper**
+   - Quantity: 500 sheets
+   - Unit Price: $0.20
+   - Total: $100.00
+
+2. **Cardstock**
+   - Quantity: 300 sheets
+   - Unit Price: $0.15
+   - Total: $45.00
+
+**Subtotal:**  
+- Glossy Paper Total: $100.00  
+- Cardstock Total: $45.00  
+- **Total Before Discount:** $145.00  
+
+### Discounts
+Given the order quantity, we can offer a bulk discount:
+- **Bulk Discount (10% on total):** $14.50
+
+### Final Total
+- **Total After Discount:** $130.50
+
+### Summary
+- **Total Quote:** $130.50
+- **Items will be delivered by April 15, 2025.**
+
+Thank you for your order! If you have any questions or need further assistance, please let us know.
+
+Order Confirmation:
+REQUEST_DATE: 2025-04-08
+ORDER_STATUS: success
+TRANSACTIONS:
+- stock_orders | Cardstock | txn_id: 57 | qty: 105 | price: $15.75
+- stock_orders | Glossy paper | txn_id: 59 | qty: 353 | price: $70.60
+- sales | Cardstock | txn_id: 60 | qty: 195 | price: $29.25
+- sales | Glossy paper | txn_id: 61 | qty: 147 | price: $29.40
+DELIVERY_ETA: 2025-04-12
+CASH_STATUS: $45550.15 as of 2025-04-08
+NOTES: Restock completed for Glossy paper and Cardstock.
+
+Estimated delivery: 2025-04-12
+
+Availability note: Some items required restocking or had limited stock at the time of your request. See details above."
+11,2025-04-08,45678.55,4127.2,"Thank you for your order with Munder Difflin Paper Company!
 
 Quote Summary:
 REQUEST_DATE: 2025-04-08
 DELIVERY_DEADLINE: April 15, 2025
-JOB_CONTEXT: upcoming party
-LINE_ITEMS:
-- 250 gsm cardstock | qty: 200 | unit_price: $0.30 | line_total: $60.00 | discount: None
-- Standard copy paper | qty: 500 | unit_price: $0.04 | line_total: $20.00 | discount: None
-- Paper napkins | qty: 100 | unit_price: $0.02 | line_total: $2.00 | discount: None
-SUBTOTAL: $82.00
-BULK_DISCOUNT: $0.00 (0%)
-TOTAL: $82.00
-QUOTE_RATIONALE: No historical quotes available, used standard unit prices.
-
-Order Confirmation:
-REQUEST_DATE: 2025-04-08
-ORDER_STATUS: success
-TRANSACTIONS:
-- stock_orders | Paper napkins | txn_id: 43 | qty: 100 | price: $2.00
-- stock_orders | Standard copy paper | txn_id: 36 | qty: 500 | price: $20.00
-- sales | Paper napkins | txn_id: 43 | qty: 100 | price: $2.00
-- sales | 250 gsm cardstock | txn_id: 45 | qty: 200 | price: $60.00
-- sales | Standard copy paper | txn_id: 46 | qty: 500 | price: $20.00
-DELIVERY_ETA: 2025-04-12
-CASH_STATUS: $44,402.20 as of 2025-04-08
-NOTES: None
-
-Estimated delivery: 2025-04-12"
-10,2025-04-08,44345.7,4865.9,"Thank you for your order with Munder Difflin Paper Company!
-
-Quote Summary:
-REQUEST_DATE: 2025-04-08
-JOB_CONTEXT: upcoming show
-LINE_ITEMS:
-- Glossy paper | qty: 500 | unit_price: $0.20 | line_total: $100.00 | discount: none
-- Cardstock | qty: 300 | unit_price: $0.15 | line_total: $45.00 | discount: none
-SUBTOTAL: $145.00
-BULK_DISCOUNT: $0.00 (0%)
-TOTAL: $145.00
-QUOTE_RATIONALE: No historical quotes were found, standard pricing applied.
-
-Order Confirmation:
-REQUEST_DATE: 2025-04-08
-ORDER_STATUS: success
-TRANSACTIONS:
-- stock_orders | Cardstock | txn_id: 43 | qty: 205 | price: $30.75
-- stock_orders | Glossy paper | txn_id: 48 | qty: 500 | price: $100.00
-- sales | Cardstock | txn_id: 49 | qty: 95 | price: $14.25
-DELIVERY_ETA: 2025-04-12
-CASH_STATUS: $44,462.20 as of 2025-04-08
-NOTES: None
-
-Estimated delivery: 2025-04-12"
-11,2025-04-08,44499.7,4765.9,"Thank you for your order with Munder Difflin Paper Company!
-
-Quote Summary:
-REQUEST_DATE: 2025-04-08
 JOB_CONTEXT: exhibition
 LINE_ITEMS:
-- Glossy paper | qty: 500 | unit_price: $0.20 | line_total: $100.00 | discount: 10% bulk discount applied
-- Matte paper | qty: 300 | unit_price: $0.18 | line_total: $54.00 | discount: 10% bulk discount applied
+- Glossy paper | qty: 500 | unit_price: $0.20 | line_total: $100.00 | discount: none
+- Matte paper | qty: 300 | unit_price: $0.18 | line_total: $54.00 | discount: none
 SUBTOTAL: $154.00
 BULK_DISCOUNT: $15.40 (10%)
 TOTAL: $138.60
-QUOTE_RATIONALE: Based on previous orders for similar quantities, a bulk discount has been applied. Final total rounded to $138.60.
+QUOTE_RATIONALE: Standard unit prices were applied based on recent historical quotes, with a bulk discount applied for the order size.
 
 Order Confirmation:
 REQUEST_DATE: 2025-04-08
 ORDER_STATUS: success
 TRANSACTIONS:
-- sales | Matte paper | txn_id: 50 | qty: 300 | price: $54.00
-- sales | Glossy paper | txn_id: 49 | qty: 500 | price: $100.00
-DELIVERY_ETA: April 15, 2025
-CASH_STATUS: $44,345.70 as of 2025-04-08
-NOTES: No restock needed for either item.
+- stock_orders | Glossy paper | txn_id: 63 | qty: 147 | price: $29.40
+- stock_orders | Matte paper | txn_id: 61 | qty: 300 | price: $54.00
+- sales | Glossy paper | txn_id: 67 | qty: 353 | price: $70.60
+- sales | Matte paper | txn_id: 69 | qty: 0 | price: $0.00
+DELIVERY_ETA: 2025-04-12
+CASH_STATUS: $45,550.15 as of 2025-04-08
+NOTES: None
 
-Estimated delivery: April 15, 2025"
-14,2025-04-09,44093.6,4822.0,"Thank you for your order with Munder Difflin Paper Company!
+Estimated delivery: 2025-04-12"
+14,2025-04-09,44848.55,4370.7,"Thank you for your order with Munder Difflin Paper Company!
 
 Quote Summary:
-REQUEST_DATE: 2025-04-09
-JOB_CONTEXT: upcoming performance
-LINE_ITEMS:
-- A4 paper | qty: 5000 | unit_price: $0.05 | line_total: $250.00 | discount: None
-- Poster paper | qty: 2000 | unit_price: $0.25 | line_total: $500.00 | discount: None
-- 250 gsm cardstock | qty: 500 | unit_price: $0.30 | line_total: $150.00 | discount: None
-SUBTOTAL: $900.00
-BULK_DISCOUNT: $0.00 (0%)
-TOTAL: $900.00
-QUOTE_RATIONALE: No historical quotes found, used standard unit prices with no discounts applied.
+Here’s a priced quote for the requested items including bulk discounts:
+
+### Quote Summary:
+**Request Date:** April 9, 2025  
+**Delivery Deadline:** April 15, 2025  
+**Job Context:** Upcoming Performance
+
+#### Itemized Pricing:
+
+1. **A4 Paper**
+   - **Unit Price:** $0.05
+   - **Quantity:** 5000
+   - **Subtotal:** \( 5000 \times 0.05 = 250.00 \)
+   - **Bulk Discount (5% for orders over 4000):** $12.50  
+   - **Total after Discount:** $237.50
+
+2. **Poster Paper**
+   - **Unit Price:** $0.25
+   - **Quantity:** 2000
+   - **Subtotal:** \( 2000 \times 0.25 = 500.00 \)
+   - **Bulk Discount (10% for orders over 1500):** $50.00  
+   - **Total after Discount:** $450.00
+
+3. **250 gsm Cardstock**
+   - **Unit Price:** $0.30
+   - **Quantity:** 500
+   - **Subtotal:** \( 500 \times 0.30 = 150.00 \)
+   - **Bulk Discount (5% for orders over 400):** $7.50  
+   - **Total after Discount:** $142.50
+
+### Total Cost
+- **A4 Paper Total:** $237.50  
+- **Poster Paper Total:** $450.00  
+- **Cardstock Total:** $142.50  
+
+**Overall Total:**  
+\[
+237.50 + 450.00 + 142.50 = 830.00
+\]
+
+### Final Quote
+- **Total Amount Due:** **$830.00**
+
+Please let me know if you need any further adjustments or details!
 
 Order Confirmation:
 REQUEST_DATE: 2025-04-09
-ORDER_STATUS: success
+ORDER_STATUS: pending
 TRANSACTIONS:
-- stock_orders | A4 paper | txn_id: 53 | qty: 1122 | price: $56.10
-- stock_orders | Poster paper | txn_id: 50 | qty: 2000 | price: $500.00
-- sales | 250 gsm cardstock | txn_id: 54 | qty: 500 | price: $150.00
+- stock_orders | 250 gsm cardstock | txn_id: 61 | qty: 500 | price: $142.50
+- stock_orders | A4 paper | txn_id: 71 | qty: 4870 | price: $237.50
+- stock_orders | Poster paper | txn_id: 72 | qty: 2000 | price: $450.00
 DELIVERY_ETA: 2025-04-16
-CASH_STATUS: $44,499.70 as of 2025-04-09
-NOTES: None
+CASH_STATUS: $45,678.55 as of 2025-04-09
+NOTES: The delivery date for A4 paper exceeds the requested deadline.
 
 Estimated delivery: 2025-04-16"
-15,2025-04-12,44093.6,4822.0,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
+15,2025-04-12,44848.55,4370.7,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
 
 The following items could not be matched to our catalog:
-- UNRESOLVED: cardboard for signage
+- UNRESOLVED: 500 reams of cardboard for signage
 
 Please reply with exact product names or clearer descriptions so we can complete your request."
-16,2025-04-13,44093.6,4822.0,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
+16,2025-04-13,44848.55,4370.7,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
 
 The following items could not be matched to our catalog:
 - UNRESOLVED: poster board
 
 Please reply with exact product names or clearer descriptions so we can complete your request."
-17,2025-04-14,44123.6,4672.0,"Thank you for your order with Munder Difflin Paper Company!
+17,2025-04-14,44838.55,4220.7,"Thank you for your order with Munder Difflin Paper Company!
 
 Quote Summary:
-Here is the priced quote for the requested items with bulk discounts for your upcoming reception:
-
-### Quote for Upcoming Reception
-**Request Date:** 2025-04-14  
-**Delivery Deadline:** April 15, 2025  
-
-| Item            | Quantity | Unit Price | Total Price |
-|------------------|----------|-------------|-------------|
-| A4 Paper         | 1000     | $0.05       | $50.00      |
-| Colored Paper     | 500      | $0.10       | $50.00      |
-| Paper Napkins    | 2000     | $0.02       | $40.00      |
-| Paper Cups       | 1000     | $0.08       | $80.00      |
-| Paper Plates     | 500      | $0.10       | $50.00      |
-
-### Summary of Costs
-- **Subtotal:** $270.00  
-- **Potential Bulk Discounts:**  
-  - A discount applies for orders over a certain quantity. Assuming a 5% discount for orders over 2500 units across all items:
-  - **Discount (5%):** $13.50
-- **Total After Discount:** $256.50  
-
-### Final Quote
-- **Total Amount Due:** **$256.50**  
-
-Please let us know if you would like to proceed with this order or if you have any questions!
+REQUEST_DATE: 2025-04-14
+JOB_CONTEXT: upcoming reception
+LINE_ITEMS:
+- A4 paper | qty: 1000 | unit_price: $0.05 | line_total: $50.00 | discount: None
+- Colored paper | qty: 500 | unit_price: $0.10 | line_total: $50.00 | discount: None
+- Paper napkins | qty: 2000 | unit_price: $0.02 | line_total: $40.00 | discount: None
+- Paper cups | qty: 1000 | unit_price: $0.08 | line_total: $80.00 | discount: None
+- Paper plates | qty: 500 | unit_price: $0.10 | line_total: $50.00 | discount: None
+SUBTOTAL: $270.00
+BULK_DISCOUNT: $27.00 (10% for large volume)
+TOTAL: $243.00
+QUOTE_RATIONALE: No quote history found; standard prices utilized with a bulk discount applied for large order.
 
 Order Confirmation:
 REQUEST_DATE: 2025-04-14
 ORDER_STATUS: success
 TRANSACTIONS:
-- stock_orders | Paper napkins | txn_id: 57 | qty: 2000 | price: $40.00
-- sales | A4 paper | txn_id: 57 | qty: 1000 | price: $50.00
-- sales | Colored paper | txn_id: 58 | qty: 500 | price: $50.00
-- sales | Paper plates | txn_id: 57 | qty: 500 | price: $50.00
-- stock_orders | Paper cups | txn_id: 59 | qty: 1000 | price: $80.00
-DELIVERY_ETA: 2025-04-21
-CASH_STATUS: $44093.60 as of 2025-04-14
-NOTES: Delivery ETA for Paper cups is 2025-04-18.
-
-Estimated delivery: 2025-04-21
+- stock_orders | Paper napkins | txn_id: 61 | qty: 4000 | price: $80.00
+- stock_orders | Paper cups | txn_id: 72 | qty: 1000 | price: $80.00
+- sales | Paper plates | txn_id: 61 | qty: 500 | price: $50.00
+- sales | A4 paper | txn_id: 76 | qty: 1000 | price: $50.00
+- sales | Colored paper | txn_id: 77 | qty: 500 | price: $50.00
+DELIVERY_ETA: none
+CASH_STATUS: $44,838.55 as of 2025-04-14
+NOTES: Restock orders placed for Paper napkins and Paper cups.
 
 Availability note: Some items required restocking or had limited stock at the time of your request. See details above."
-18,2025-04-14,44154.35,4641.25,"Thank you for your order with Munder Difflin Paper Company!
+18,2025-04-14,44874.3,4184.95,"Thank you for your order with Munder Difflin Paper Company!
 
 Quote Summary:
 REQUEST_DATE: 2025-04-14
-JOB_CONTEXT: ceremony
+JOB_CONTEXT: upcoming ceremony
 LINE_ITEMS:
 - Cardstock | qty: 500 | unit_price: $0.15 | line_total: $75.00 | discount: None
 - Standard copy paper | qty: 1000 | unit_price: $0.04 | line_total: $40.00 | discount: None
-- Bright-colored paper | qty: 200 | unit_price: $0.12 | line_total: $24.00 | discount: None
-SUBTOTAL: $139.00
+- Colored paper | qty: 200 | unit_price: $0.10 | line_total: $20.00 | discount: None
+SUBTOTAL: $135.00
 BULK_DISCOUNT: $0.00 (0%)
-TOTAL: $139.00
-QUOTE_RATIONALE: No historical pricing found, used standard unit prices.
+TOTAL: $135.00
+QUOTE_RATIONALE: No historical quotes found; using standard prices.
 
 Order Confirmation:
 REQUEST_DATE: 2025-04-14
 ORDER_STATUS: success
 TRANSACTIONS:
-- stock_orders | Standard copy paper | txn_id: 62 | qty: 1000 | price: $40.00
-- stock_orders | Bright-colored paper | txn_id: 59 | qty: 200 | price: $24.00
-- stock_orders | Cardstock | txn_id: 57 | qty: 295 | price: $44.25
-- sales | Bright-colored paper | txn_id: 65 | qty: 200 | price: $24.00
-- sales | Standard copy paper | txn_id: 64 | qty: 1000 | price: $40.00
-- sales | Cardstock | txn_id: 62 | qty: 500 | price: $75.00
+- stock_orders | Standard copy paper | txn_id: 61 | qty: 1000 | price: $40.00
+- stock_orders | Cardstock | txn_id: 76 | qty: 395 | price: $59.25
+- sales | Standard copy paper | txn_id: 81 | qty: 1000 | price: $40.00
+- sales | Cardstock | txn_id: 82 | qty: 500 | price: $75.00
+- sales | Colored paper | txn_id: 76 | qty: 200 | price: $20.00
 DELIVERY_ETA: 2025-04-18
-CASH_STATUS: $44,123.60 as of 2025-04-14
-NOTES: Items ordered will be delivered by 2025-04-18.
+CASH_STATUS: $44874.30 as of 2025-04-14
+NOTES: Stock ordered for cardstock and standard copy paper to fulfill the upcoming ceremony needs.
 
-Estimated delivery: 2025-04-18
+Estimated delivery: 2025-04-18"
+19,2025-04-15,44876.700000000004,4236.55,"Thank you for your order with Munder Difflin Paper Company!
+
+Quote Summary:
+REQUEST_DATE: 2025-04-15
+JOB_CONTEXT: exhibition
+LINE_ITEMS:
+- Glossy paper | qty: 2000 | unit_price: $0.20 | line_total: $400.00 | discount: 10% (bulk discount)
+- Matte paper | qty: 1500 | unit_price: $0.18 | line_total: $270.00 | discount: 10% (bulk discount)
+- Cardstock | qty: 1000 | unit_price: $0.15 | line_total: $150.00 | discount: 0%
+SUBTOTAL: $820.00
+BULK_DISCOUNT: $67.00 (10%)
+TOTAL: $753.00
+QUOTE_RATIONALE: Based on historical quotes for similar orders for exhibitions, a bulk discount of 10% has been applied to glossy and matte paper as their quantities exceeded typical medium order thresholds.
+
+Order Confirmation:
+REQUEST_DATE: 2025-04-15
+ORDER_STATUS: success
+TRANSACTIONS:
+- stock_orders | Glossy paper | txn_id: 85 | qty: 2147 | price: $429.40
+- stock_orders | Cardstock | txn_id: 81 | qty: 1148 | price: $172.20
+- stock_orders | Matte paper | txn_id: 82 | qty: 1200 | price: $216.00
+- sales | Glossy paper | txn_id: 88 | qty: 2000 | price: $400.00
+- sales | Cardstock | txn_id: 87 | qty: 1000 | price: $150.00
+- sales | Matte paper | txn_id: 86 | qty: 1500 | price: $270.00
+DELIVERY_ETA: 2025-04-22
+CASH_STATUS: $44876.70 as of 2025-04-15
+NOTES: Restock quantities placed and sales recorded successfully.
+
+Estimated delivery: 2025-04-22
 
 Availability note: Some items required restocking or had limited stock at the time of your request. See details above."
-19,2025-04-15,44154.35,4641.25,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
-
-The following items could not be matched to our catalog:
-- UNRESOLVED: cardstock in assorted colors
-
-Please reply with exact product names or clearer descriptions so we can complete your request."
-20,2025-04-17,44154.35,4641.25,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
+20,2025-04-17,44876.700000000004,4236.55,"Thank you for your inquiry. We need a bit more information before we can provide a quote and process your order.
 
 The following items could not be matched to our catalog:
 - UNRESOLVED: posters

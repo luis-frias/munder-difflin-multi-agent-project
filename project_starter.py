@@ -950,6 +950,72 @@ def create_ordering_agent(llm_model: Optional[OpenAIModel] = None) -> OrderingAg
     return OrderingAgent(llm_model or model)
 
 
+class Orchestrator:
+    """Coordinates specialist agents and composes customer-facing replies."""
+
+    def __init__(self, llm_model: Optional[OpenAIModel] = None):
+        llm = llm_model or model
+        self.parser = create_request_parser_agent(llm)
+        self.inventory = create_inventory_agent(llm)
+        self.quoting = create_quoting_agent(llm)
+        self.ordering = create_ordering_agent(llm)
+
+    def _delegate_with_retry(self, agent: ToolCallingAgent, handoff: str) -> str:
+        """Re-invoke a specialist once on transient errors before escalating."""
+        last_error: Optional[Exception] = None
+        for _ in range(2):
+            try:
+                return str(agent.run(handoff))
+            except Exception as exc:
+                last_error = exc
+        return f"SPECIALIST_ERROR: {last_error}"
+
+    @staticmethod
+    def _has_unresolved_items(parsed_text: str) -> bool:
+        return "UNRESOLVED:" in parsed_text.upper()
+
+    @staticmethod
+    def _extract_unresolved_lines(parsed_text: str) -> List[str]:
+        return [
+            line.strip()
+            for line in parsed_text.splitlines()
+            if "UNRESOLVED:" in line.upper()
+        ]
+
+    def _compose_clarification(self, parsed_text: str) -> str:
+        unresolved_lines = self._extract_unresolved_lines(parsed_text)
+        unresolved_block = "\n".join(unresolved_lines) if unresolved_lines else parsed_text
+        return (
+            "Thank you for your inquiry. We need a bit more information before we can "
+            "provide a quote and process your order.\n\n"
+            "The following items could not be matched to our catalog:\n"
+            f"{unresolved_block}\n\n"
+            "Please reply with exact product names or clearer descriptions so we can "
+            "complete your request."
+        )
+
+    def handle_request(self, raw_request: str, request_date: str) -> str:
+        """Route a customer request through the multi-agent pipeline."""
+        parser_handoff = (
+            f"Parse this customer request.\n\n{raw_request}\n\nRequest date: {request_date}"
+        )
+        parsed = self._delegate_with_retry(self.parser, parser_handoff)
+
+        if parsed.startswith("SPECIALIST_ERROR:"):
+            return (
+                "We were unable to process your request due to a system error while "
+                f"parsing your order. Details: {parsed}"
+            )
+
+        if self._has_unresolved_items(parsed):
+            return self._compose_clarification(parsed)
+
+        return (
+            "Your request was parsed successfully. Order processing pipeline is not yet "
+            "complete for this build step."
+        )
+
+
 # Run your test scenarios by writing them here. Make sure to keep track of them.
 
 def run_test_scenarios():
@@ -981,6 +1047,8 @@ def run_test_scenarios():
     ############
     ############
 
+    orchestrator = Orchestrator(model)
+
     results = []
     for idx, row in quote_requests_sample.iterrows():
         request_date = row["request_date"].strftime("%Y-%m-%d")
@@ -1002,8 +1070,7 @@ def run_test_scenarios():
         ############
         ############
 
-        # response = call_your_multi_agent_system(request_with_date)
-        response = "Not implemented — wire your multi-agent system above."
+        response = orchestrator.handle_request(request_with_date, request_date)
 
         # Update state
         report = generate_financial_report(request_date)

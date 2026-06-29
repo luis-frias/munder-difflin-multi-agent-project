@@ -817,6 +817,52 @@ def create_request_parser_agent(llm_model: Optional[OpenAIModel] = None) -> Requ
     """Build a RequestParserAgent using the shared project model."""
     return RequestParserAgent(llm_model or model)
 
+
+INVENTORY_AGENT_INSTRUCTIONS = """You are the Inventory Agent for Munder Difflin Paper Company.
+
+You receive parsed line items and a request date. Check stock as of that date using your tools.
+
+For each item (skip UNRESOLVED lines):
+1. Use check_stock for current stock as of REQUEST_DATE.
+2. Use get_inventory_item_details for min_stock_level when available.
+3. Compare requested qty to available stock.
+
+Restock recommendation when stock is below requested qty OR below min_stock_level:
+- shortfall = max(0, requested_qty - current_stock)
+- If current_stock < min_stock_level after fulfilling the sale, also buffer to reach min_stock_level.
+- restock_qty = shortfall + max(0, min_stock_level - (current_stock - requested_qty))
+
+Output plain text only:
+REQUEST_DATE: <date>
+ITEMS:
+- <item_name> | requested: <qty> | in_stock: <qty> | status: IN_STOCK | restock_qty: 0
+- <item_name> | requested: <qty> | in_stock: <qty> | status: SHORTFALL <n> | restock_qty: <n>
+- <item_name> | status: NOT_IN_CATALOG (if item not found)
+
+SUMMARY:
+- sufficient_stock: yes|no
+- items_needing_restock: <comma-separated item names or none>"""
+
+
+class InventoryAgent(ToolCallingAgent):
+    """Checks stock levels and recommends restocking."""
+
+    def __init__(self, llm_model: OpenAIModel):
+        super().__init__(
+            tools=[check_all_stock, check_stock, get_inventory_item_details],
+            model=llm_model,
+            name="inventory_agent",
+            description="Checks inventory as of request date and flags shortfalls.",
+            instructions=INVENTORY_AGENT_INSTRUCTIONS,
+            max_steps=15,
+        )
+
+
+def create_inventory_agent(llm_model: Optional[OpenAIModel] = None) -> InventoryAgent:
+    """Build an InventoryAgent using the shared project model."""
+    return InventoryAgent(llm_model or model)
+
+
 # Run your test scenarios by writing them here. Make sure to keep track of them.
 
 def run_test_scenarios():

@@ -24,6 +24,8 @@ munder-difflin-multi-agent-project/
 ├── DESIGN.md
 ├── WORKFLOW.md
 ├── REFLECTION.md
+├── IMPLEMENTATION.md
+├── VOCAREUM_SETUP.md
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
@@ -31,7 +33,8 @@ munder-difflin-multi-agent-project/
 ├── quote_requests.csv
 ├── quote_requests_sample.csv
 ├── quotes.csv
-└── VOCAREUM_SETUP.md
+├── test_results.csv
+└── test_run_step9.log
 ```
 
 Files not committed (created locally): `.env`, `.venv/`, `munder_difflin.db`
